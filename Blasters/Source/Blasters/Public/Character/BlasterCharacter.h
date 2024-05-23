@@ -20,7 +20,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	void Jump();
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	void Turn(float Value);

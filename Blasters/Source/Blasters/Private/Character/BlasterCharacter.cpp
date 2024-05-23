@@ -20,7 +20,9 @@ ABlasterCharacter::ABlasterCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
-
+	//将角色朝向设置为运动，这两步要一起设置
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
 void ABlasterCharacter::BeginPlay()
@@ -39,10 +41,6 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis("Turn", this, &ABlasterCharacter::Turn);
 	PlayerInputComponent->BindAxis("LookUp", this, &ABlasterCharacter::LookUp);
 
-}
-
-void ABlasterCharacter::Jump()
-{
 }
 
 void ABlasterCharacter::MoveForward(float Value)
