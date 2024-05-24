@@ -17,15 +17,15 @@ void UOverHeadWidget::ShowPlayerNetRole(APawn* InPawn)
 	//通过获取本地和远程，在客户端和服务端上两次是不同的结果
 
 	//显示本地
-	//ENetRole LocalRole = InPawn->GetLocalRole();
+	ENetRole LocalRole = InPawn->GetLocalRole();
 	// 
 	//显示远程
-	ENetRole RemoteRole = InPawn->GetRemoteRole();
+	//ENetRole RemoteRole = InPawn->GetRemoteRole();
 
 
 	FString Role;
 
-	switch (RemoteRole)
+	switch (LocalRole)
 	{
 	case ROLE_None:
 		Role = FString("None");
@@ -44,10 +44,11 @@ void UOverHeadWidget::ShowPlayerNetRole(APawn* InPawn)
 		break;
 	}
 
-	//FString LocalRoleString = FString::Printf(TEXT("Local Role: %s"), *Role);
+	FString LocalRoleString = FString::Printf(TEXT("Local Role: %s"), *Role);
 
-	FString RemoteRoleString = FString::Printf(TEXT("Remote Role: %s"), *Role);
-	SetDisplayText(RemoteRoleString);
+	//FString RemoteRoleString = FString::Printf(TEXT("Remote Role: %s"), *Role);
+
+	SetDisplayText(LocalRoleString);
 
 }
 
