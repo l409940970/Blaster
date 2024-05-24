@@ -8,7 +8,8 @@ AWeapon::AWeapon()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-
+	//是否进行网络复制
+	bReplicates = true;
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
 	//WeaponMesh->SetupAttachment(RootComponent);
@@ -33,7 +34,13 @@ void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 
-
+	//HasAuthority（）:判断是否是服务端
+	//在服务端开启碰撞
+	if (HasAuthority())
+	{
+		AreaSpere->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		AreaSpere->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
+	}
 	
 }
 void AWeapon::Tick(float DeltaTime)
