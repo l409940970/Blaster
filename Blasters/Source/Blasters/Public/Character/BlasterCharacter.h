@@ -16,6 +16,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//获取生命周期复制道具
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -36,7 +38,21 @@ private:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* OverHeadWidget;
 
-public:	
+	//一个可被网络复制的武器变量
+	//UPROPERTY(Replicated)
+	//ReplicatedUsing 表示当该变量在服务器上变化时,会调用事先绑定好的回调函数(函数名一般以OnRep开头),回调函数要用UFUNCTION标记
+	//这个函数服务器不会调用，因为复制是从服务器到客户端，不能从客户端到服务器
+	UPROPERTY(ReplicatedUsing = OnRep_OverlappingWeapon)
+	class AWeapon* OverlappingWeapon;
 
+	//这个存储的lastWeapon是上一次的值
+	UFUNCTION()
+	void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
+
+public:	
+	//FORCEINLINE 关键字的作用是告诉编译器，它需要强制将函数内联,一般用于逻辑简单的函数
+	//FORCEINLINE void SetOverlappingWeapon(AWeapon* Weapon) { OverlappingWeapon = Weapon; }
+
+	void SetOverlappingWeapon(AWeapon* Weapon);
 
 };
