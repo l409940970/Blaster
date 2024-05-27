@@ -24,25 +24,6 @@ void UCombatComponent::BeginPlay()
 	
 }
 
-void UCombatComponent::SetAiming(bool isAim)
-{
-	bAiming = isAim;
-	//这里不需要判断在客户端时要调用服务器的函数
-	// 因为动画的变化不会对游戏造成影响，不经过服务器验证也可以
-	//if (!Character->HasAuthority())
-	//{
-	//	Server_SetAiming(isAim);
-
-	//}
-	Server_SetAiming(isAim);
-}
-
-void UCombatComponent::Server_SetAiming_Implementation(bool isAim)
-{
-	bAiming = isAim;
-
-}
-
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);

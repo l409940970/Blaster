@@ -23,11 +23,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	void SetAiming(bool isAim);
-	// π”√RPC
-	UFUNCTION(Server,Reliable)
-	void Server_SetAiming(bool isAim);
-
 private:
 	class ABlasterCharacter* Character;
 

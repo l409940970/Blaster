@@ -108,14 +108,18 @@ void AWeapon::OnRep_WeaponState()
 void AWeapon::SetWeaponState(EWeaponState State)
 {
 	WeaponState = State;
-	
-	switch (WeaponState)
+
+	if (HasAuthority())
 	{
-	case EWeaponState::EWS_Equipped:
-		ShowPickupWidget(false);
-		AreaSpere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		break;
+		switch (WeaponState)
+		{
+		case EWeaponState::EWS_Equipped:
+			ShowPickupWidget(false);
+			AreaSpere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			break;
+		}
 	}
+
 }
 
 USphereComponent* AWeapon::GetAreaSphere() const
