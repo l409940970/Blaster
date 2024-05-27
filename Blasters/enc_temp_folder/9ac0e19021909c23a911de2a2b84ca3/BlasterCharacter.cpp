@@ -126,7 +126,7 @@ void ABlasterCharacter::LookUp(float Value)
 void ABlasterCharacter::EquipButtonPressed()
 {
 	//装配武器要在服务器执行
-	if (Combat && HasAuthority())
+	if (Combat)
 	{
 		Combat->EquipWeapon(OverlappingWeapon);
 	}

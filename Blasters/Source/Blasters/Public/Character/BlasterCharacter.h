@@ -19,6 +19,8 @@ public:
 	//获取生命周期复制道具
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	//ActorComponent初始完成后调用的函数
+	virtual void PostInitializeComponents() override;
 protected:
 	virtual void BeginPlay() override;
 
@@ -26,6 +28,7 @@ protected:
 	void MoveRight(float Value);
 	void Turn(float Value);
 	void LookUp(float Value);
+	void EquipButtonPressed();
 	
 
 private:
@@ -48,6 +51,11 @@ private:
 	//这个存储的lastWeapon是上一次的值
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
+
+
+	//战斗组件
+	UPROPERTY(VisibleAnywhere)
+	class UCombatComponent* Combat;
 
 public:	
 	//FORCEINLINE 关键字的作用是告诉编译器，它需要强制将函数内联,一般用于逻辑简单的函数
