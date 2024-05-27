@@ -57,6 +57,11 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UCombatComponent* Combat;
 
+	//使用RPC,可靠传输
+	//函数的定义后面要加上 _Implementation
+	UFUNCTION(Server,Reliable)
+	void Server_EquipButtonPressed();
+
 public:	
 	//FORCEINLINE 关键字的作用是告诉编译器，它需要强制将函数内联,一般用于逻辑简单的函数
 	//FORCEINLINE void SetOverlappingWeapon(AWeapon* Weapon) { OverlappingWeapon = Weapon; }

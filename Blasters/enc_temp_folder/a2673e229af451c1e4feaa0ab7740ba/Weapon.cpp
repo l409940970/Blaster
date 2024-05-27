@@ -109,15 +109,13 @@ void AWeapon::SetWeaponState(EWeaponState State)
 {
 	WeaponState = State;
 
-	if (HasAuthority())
+	switch (WeaponState)
 	{
-		switch (WeaponState)
-		{
-		case EWeaponState::EWS_Equipped:
-			ShowPickupWidget(false);
-			AreaSpere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-			break;
-		}
+	case EWeaponState::EWS_Equipped:
+		ShowPickupWidget(false);
+		ShowPickupWidget(false);
+		AreaSpere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		break;
 	}
 
 }

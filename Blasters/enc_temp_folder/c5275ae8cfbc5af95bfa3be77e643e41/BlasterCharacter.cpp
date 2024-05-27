@@ -128,9 +128,26 @@ void ABlasterCharacter::EquipButtonPressed()
 	//装配武器要在服务器执行
 	if (Combat)
 	{
-		Combat->EquipWeapon(OverlappingWeapon);
+		if (HasAuthority())
+		{
+			Combat->EquipWeapon(OverlappingWeapon);
+		}
+		else
+		{
+			//如果是客户端的话，就通过RPC调用服务器上的函数
+			Server_EquipButtonPressed();
+		}
+
 	}
 
+}
+
+void ABlasterCharacter::Server_EquipButtonPressed_Implementation()
+{
+	if (Combat)
+	{
+		Combat->EquipWeapon(OverlappingWeapon);
+	}
 }
 
 
@@ -167,7 +184,6 @@ void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 		LastWeapon->ShowPickupWidget(false);
 	}
 }
-
 
 
 
