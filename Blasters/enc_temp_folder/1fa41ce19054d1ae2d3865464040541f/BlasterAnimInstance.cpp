@@ -38,9 +38,10 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	FRotator AimRotation = BlasterChanracter->GetBaseAimRotation();
 	FRotator MovementRotation = UKismetMathLibrary::MakeRotFromX(BlasterChanracter->GetVelocity());
 	FRotator DeltaRot = UKismetMathLibrary::NormalizedDeltaRotator(MovementRotation, AimRotation);
-	DeltaRotation = FMath::RInterpTo(DeltaRotation, DeltaRot, DeltaTime, 6.f);
+	DeltaRotation = FMath::RInterpTo(DeltaRotation, DeltaRot, DeltaTime, 5.f);
 	YawOffset = DeltaRotation.Yaw;
 
+	UE_LOG(LogTemp, Display, TEXT("value : %f"), YawOffset);
 
 	//倾斜和角色本身与其自身旋转之间的delta Air旋转有关
 	CharacterRotationLastFrame = CharacterRotation;

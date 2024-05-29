@@ -29,6 +29,7 @@ public:
 	AWeapon();
 
 	virtual void Tick(float DeltaTime) override;
+	//显示拾取ui
 	void ShowPickupWidget(bool bShowWidget);
 
 	//获取生命周期复制道具
@@ -63,6 +64,7 @@ private:
 	UPROPERTY(ReplicatedUsing = OnRep_WeaponState, VisibleAnywhere, Category = "Weapon Properties")
 	EWeaponState WeaponState;
 
+	//Weaponstate属性改变后的调用函数（客户端执行）
 	UFUNCTION()
 	void OnRep_WeaponState();
 

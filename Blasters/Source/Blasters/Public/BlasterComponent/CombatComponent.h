@@ -17,6 +17,8 @@ public:
 	friend class ABlasterCharacter;
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
+	//获取生命周期复制道具，设置需要属性同步的变量
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
 
 
@@ -24,14 +26,18 @@ protected:
 	virtual void BeginPlay() override;
 
 	void SetAiming(bool isAim);
-	//使用RPC
+
+	//使用RPC（server调用）
 	UFUNCTION(Server,Reliable)
 	void Server_SetAiming(bool isAim);
+	
+	UFUNCTION()
+	void OnRep_EquippedWeapon();
 
 private:
 	class ABlasterCharacter* Character;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
 	class AWeapon* EquippedWeapon;
 
 	UPROPERTY(EditDefaultsOnly)

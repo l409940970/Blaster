@@ -68,9 +68,7 @@ private:
 public:	
 	//FORCEINLINE 关键字的作用是告诉编译器，它需要强制将函数内联,一般用于逻辑简单的函数
 	//FORCEINLINE void SetOverlappingWeapon(AWeapon* Weapon) { OverlappingWeapon = Weapon; }
-
 	void SetOverlappingWeapon(AWeapon* Weapon);
-
 	bool IsWeaponEquipped();
 	bool IsAiming();
 };
