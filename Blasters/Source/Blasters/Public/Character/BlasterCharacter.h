@@ -32,6 +32,9 @@ protected:
 	void CrouchButtonPressed();
 	void AimButtonPressed();
 	void AimButtonReleased();
+
+	//瞄准偏移
+	void AimOffset(float DeltaTime);
 	
 
 private:
@@ -65,10 +68,19 @@ private:
 	UFUNCTION(Server,Reliable)
 	void Server_EquipButtonPressed();
 
+
+	//瞄准偏移
+	float AO_Yaw;
+	float AO_Pitch;
+	FRotator StartAimRotator;
+
 public:	
 	//FORCEINLINE 关键字的作用是告诉编译器，它需要强制将函数内联,一般用于逻辑简单的函数
 	//FORCEINLINE void SetOverlappingWeapon(AWeapon* Weapon) { OverlappingWeapon = Weapon; }
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();
 	bool IsAiming();
+
+	FORCEINLINE float GetAO_Yaw() const{ return AO_Yaw; }
+	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
 };

@@ -53,6 +53,9 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	Lean = FMath::Clamp(Interp, -90.f, 90.f);
 
 	
+	//瞄准偏移
+	AO_Yaw = BlasterChanracter->GetAO_Yaw();
+	AO_Pitch = BlasterChanracter->GetAO_Pitch();
 
 
 	//BlasterChanracter->HasAuthority() == true:服务器 // BlasterChanracter->IsLocallyControlled() == true 本地玩家 
