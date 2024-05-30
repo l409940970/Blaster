@@ -222,17 +222,6 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 	}
 
 	AO_Pitch = GetBaseAimRotation().Pitch;
-	//这一段是用于处理网络同步时角度不一致问题
-	//因为这同步的时候，角度会被无符号的值。也就是在本地玩家中角度是-90度，但是同步到其他玩家那里时，角度会变成270度
-	//因此这一段是本地玩家处理其他玩家同步过来的pitch值，使本地玩家看到的其他玩家动画 和 其他玩家自己看到的动画一致
-	if (AO_Pitch > 90.f && !IsLocallyControlled())
-	{
-		//[270,360) to [-90,0);
-		FVector2D InRange(270.f, 360.f);
-		FVector2D OutRange(-90.f, 0.f);
-		AO_Pitch = FMath::GetMappedRangeValueClamped(InRange, OutRange, AO_Pitch);
-
-	}
 }
 
 
