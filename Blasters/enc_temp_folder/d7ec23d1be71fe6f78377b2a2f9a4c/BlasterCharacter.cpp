@@ -9,7 +9,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Weapon/Weapon.h"
 #include "BlasterComponent/CombatComponent.h"
-#include "Components/CapsuleComponent.h"
+
 
 ABlasterCharacter::ABlasterCharacter()
 {
@@ -38,11 +38,6 @@ ABlasterCharacter::ABlasterCharacter()
 
 	//设置是否可下蹲
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
-
-	//忽略相机
-	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
-	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
-
 
 }
 

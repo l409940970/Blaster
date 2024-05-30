@@ -16,18 +16,13 @@ UCombatComponent::UCombatComponent()
 
 	PrimaryComponentTick.bCanEverTick = false;
 
-	BaseWalkSpeed = 600.f;
-	AimWaklSpeed = 400.f;
 
 }
 
 void UCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	if (Character)
-	{
-		Character->GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
-	}
+
 	
 }
 
@@ -42,21 +37,8 @@ void UCombatComponent::SetAiming(bool isAim)
 
 	//}
 	Server_SetAiming(isAim);
-	if (Character)
-	{
-		Character->GetCharacterMovement()->MaxWalkSpeed = isAim ? AimWaklSpeed : BaseWalkSpeed;
-	}
 }
 
-void UCombatComponent::Server_SetAiming_Implementation(bool isAim)
-{
-	bAiming = isAim;
-	//characterMovement里的MaxWalkSpeed需要同步到服务器
-	if (Character)
-	{
-		Character->GetCharacterMovement()->MaxWalkSpeed = isAim ? AimWaklSpeed : BaseWalkSpeed;
-	}
-}
 void UCombatComponent::OnRep_EquippedWeapon()
 {
 	if (EquippedWeapon && Character)
@@ -65,6 +47,12 @@ void UCombatComponent::OnRep_EquippedWeapon()
 		Character->GetCharacterMovement()->bOrientRotationToMovement = false;
 		Character->bUseControllerRotationYaw = true;
 	}
+}
+
+void UCombatComponent::Server_SetAiming_Implementation(bool isAim)
+{
+	bAiming = isAim;
+
 }
 
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

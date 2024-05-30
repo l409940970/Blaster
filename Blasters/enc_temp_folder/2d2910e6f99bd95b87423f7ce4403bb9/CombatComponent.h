@@ -40,16 +40,12 @@ private:
 	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
 	class AWeapon* EquippedWeapon;
 
-	UPROPERTY(EditDefaultsOnly,Category = "MoveMent")
+	UPROPERTY(EditDefaultsOnly)
 	FName SocketName = "RightHandSocket";
 
 	UPROPERTY(Replicated)
 	bool bAiming;
 
-	UPROPERTY(EditAnywhere, Category = "MoveMent")
-	float BaseWalkSpeed;
-	UPROPERTY(EditAnywhere, Category = "MoveMent")
-	float AimWaklSpeed;
 public:	
 	void EquipWeapon(AWeapon* WeaponToEquip);
 		
