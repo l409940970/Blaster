@@ -39,12 +39,18 @@ ABlasterCharacter::ABlasterCharacter()
 
 	//设置是否可下蹲
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
+	//后转向速度
+	//GetCharacterMovement()->RotationRate = FRotator(0.f, 0.f, 800.f);
 
 	//忽略相机
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
+
+	//网络更新频率
+	NetUpdateFrequency = 66.f;
+	MinNetUpdateFrequency = 33.f;
 
 }
 
@@ -254,14 +260,10 @@ void ABlasterCharacter::TurnInPlace(float DeltaTime)
 	{
 		TurningInPlace = ETurningInPlace::ETIP_Left;
 	}
-	//else
-	//{
-	//	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
-	//}
 
 	if (TurningInPlace != ETurningInPlace :: ETIP_NotTurning)
 	{
-		InterpAO_Yaw = FMath::FInterpTo(InterpAO_Yaw, 0.f, DeltaTime, 10.f);
+		InterpAO_Yaw = FMath::FInterpTo(InterpAO_Yaw, 0.f, DeltaTime, 4.f);
 		AO_Yaw = InterpAO_Yaw;
 		if (FMath::Abs(AO_Yaw)<15.f)
 		{

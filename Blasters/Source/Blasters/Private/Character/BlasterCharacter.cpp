@@ -39,6 +39,8 @@ ABlasterCharacter::ABlasterCharacter()
 
 	//设置是否可下蹲
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
+	//后转向速度
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 800.f,0.f);
 
 	//忽略相机
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
@@ -194,6 +196,18 @@ void ABlasterCharacter::AimButtonReleased()
 	if (Combat)
 	{
 		Combat->SetAiming(false);
+	}
+}
+
+void ABlasterCharacter::Jump()
+{
+	if (bIsCrouched)
+	{
+		UnCrouch();
+	}
+	else
+	{
+		Super::Jump();
 	}
 }
 

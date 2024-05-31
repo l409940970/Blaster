@@ -33,7 +33,6 @@ protected:
 	void CrouchButtonPressed();
 	void AimButtonPressed();
 	void AimButtonReleased();
-	virtual void Jump() override;
 
 
 	
