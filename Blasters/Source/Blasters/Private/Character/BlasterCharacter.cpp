@@ -268,6 +268,15 @@ bool ABlasterCharacter::IsAiming()
 
 }
 
+AWeapon* ABlasterCharacter::GetEquippedWeapon()
+{
+	if (Combat == nullptr)
+	{
+		return nullptr;
+	}
+	return Combat->EquippedWeapon;
+}
+
 //¿Í»§¶ËÖ´ÐÐ
 void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 {

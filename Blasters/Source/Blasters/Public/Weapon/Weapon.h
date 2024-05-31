@@ -77,5 +77,6 @@ public:
 
 	void SetWeaponState(EWeaponState State);
 	USphereComponent* GetAreaSphere()const;
+	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
 
 };

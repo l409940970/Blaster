@@ -51,13 +51,16 @@ private:
 	//瞄准偏移pitch
 	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	float AO_Pitch;
-
+	//左手放到枪上的位置，用逆运动学处理左手位置
+	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	FTransform LeftHandTransform; 
 
 
 	//
 	FRotator DeltaRotation;
 	FRotator CharacterRotationLastFrame;
 	FRotator CharacterRotation; 
+	class AWeapon* EquippedWeapon;
 
 
 };

@@ -5,6 +5,8 @@
 #include "Character/BlasterCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Weapon/Weapon.h"
+
 
 void UBlasterAnimInstance::NativeInitializeAnimation()
 {
@@ -30,6 +32,7 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	//GetCurrentAcceleration()：获取加速度
 	bIsAccelerating = BlasterChanracter->GetCharacterMovement()->GetCurrentAcceleration().Size() > 0.f ? true : false;
 	bWeaponEquipped = BlasterChanracter->IsWeaponEquipped();
+	EquippedWeapon = BlasterChanracter->GetEquippedWeapon();
 	bIsCrouched = BlasterChanracter->bIsCrouched;
 	bAiming = BlasterChanracter->IsAiming();
 
@@ -57,6 +60,18 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	AO_Yaw = BlasterChanracter->GetAO_Yaw();
 	AO_Pitch = BlasterChanracter->GetAO_Pitch();
 
+	if (bWeaponEquipped && EquippedWeapon && EquippedWeapon->GetWeaponMesh() && BlasterChanracter->GetMesh())
+	{
+		LeftHandTransform = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(FName("LeftHandSocket"), ERelativeTransformSpace::RTS_World);
+		FVector OutPosition;
+		FRotator OutRotation;
+		//将位置从世界空间转换为骨骼相对空间
+		//将LeftHandTransform在世界的位置转换到hand_r在骨骼中的相对位置
+		BlasterChanracter->GetMesh()->TransformToBoneSpace(FName("hand_r"), LeftHandTransform.GetLocation(), FRotator::ZeroRotator, OutPosition, OutRotation);
+		LeftHandTransform.SetLocation(OutPosition);
+		LeftHandTransform.SetRotation(FQuat(OutRotation));
+	}
+
 
 	//BlasterChanracter->HasAuthority() == true:服务器 // BlasterChanracter->IsLocallyControlled() == true 本地玩家 
 	//if (!BlasterChanracter->HasAuthority() && !BlasterChanracter->IsLocallyControlled())
@@ -68,4 +83,5 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	//		FString::Printf(TEXT("AimRotation Yaw : %f  // MovementRotation Yaw : %f  "), AimRotation.Yaw, MovementRotation.Yaw)
 	//	);
 	//}
+
 }
