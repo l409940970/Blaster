@@ -46,6 +46,10 @@ ABlasterCharacter::ABlasterCharacter()
 
 	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
 
+	//ÍøÂç¸üÐÂÆµÂÊ
+	NetUpdateFrequency = 66.f;
+	MinNetUpdateFrequency = 33.f;
+
 }
 
 void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
