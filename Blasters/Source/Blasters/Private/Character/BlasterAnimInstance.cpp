@@ -35,6 +35,7 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	EquippedWeapon = BlasterChanracter->GetEquippedWeapon();
 	bIsCrouched = BlasterChanracter->bIsCrouched;
 	bAiming = BlasterChanracter->IsAiming();
+	TurningInPlace = BlasterChanracter->GetTurningInPlace();
 
 	//Rotator在底层已经实现了复制
 	//yawoffset 用于扫射  

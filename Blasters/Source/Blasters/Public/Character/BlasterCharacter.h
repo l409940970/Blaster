@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "BlasterTypes/TurningInPlace.h"
 #include "BlasterCharacter.generated.h"
 
 UCLASS()
@@ -33,8 +34,7 @@ protected:
 	void AimButtonPressed();
 	void AimButtonReleased();
 
-	//瞄准偏移
-	void AimOffset(float DeltaTime);
+
 	
 
 private:
@@ -68,11 +68,18 @@ private:
 	UFUNCTION(Server,Reliable)
 	void Server_EquipButtonPressed();
 
+	//瞄准偏移
+	void AimOffset(float DeltaTime);
+	void TurnInPlace(float DeltaTime);
 
 	//瞄准偏移
 	float AO_Yaw;
 	float AO_Pitch;
+	float InterpAO_Yaw;
+
 	FRotator StartAimRotator;
+
+	ETurningInPlace TurningInPlace;
 
 public:	
 	//FORCEINLINE 关键字的作用是告诉编译器，它需要强制将函数内联,一般用于逻辑简单的函数
@@ -85,4 +92,6 @@ public:
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
 
 	AWeapon* GetEquippedWeapon();
+
+	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }
 };
