@@ -35,6 +35,8 @@ public:
 	//获取生命周期复制道具
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	void Fire();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -71,7 +73,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	class UWidgetComponent* PickUpWidget;
-
+	//开火动画
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	class UAnimationAsset* FireAnimation;
 
 public:		
 
