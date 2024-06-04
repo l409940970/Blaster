@@ -369,7 +369,8 @@ void ABlasterCharacter::PlayFireMontage(bool bAiming)
 			AnimInstance->Montage_Play(FireWeaponMontage);
 			FName SectionName;
 			SectionName = bAiming ? FName("RifleAim") : FName("RifleHip");
-			//AnimInstance->Montage_JumpToSection(SectionName);
+			//通过蒙太奇片段名称播放不同的动画
+			AnimInstance->Montage_JumpToSection(SectionName);
 		}
 	}
 }
