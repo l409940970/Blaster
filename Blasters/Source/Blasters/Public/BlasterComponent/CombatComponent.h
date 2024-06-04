@@ -50,7 +50,11 @@ private:
 	float BaseWalkSpeed;
 	UPROPERTY(EditAnywhere, Category = "MoveMent")
 	float AimWaklSpeed;
+
+	bool bFireButtonPressed;
+
 public:	
 	void EquipWeapon(AWeapon* WeaponToEquip);
+	void FireButtonPressed(bool bPressed);
 		
 };

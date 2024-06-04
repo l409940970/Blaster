@@ -369,7 +369,7 @@ void ABlasterCharacter::PlayFireMontage(bool bAiming)
 			AnimInstance->Montage_Play(FireWeaponMontage);
 			FName SectionName;
 			SectionName = bAiming ? FName("RifleAim") : FName("RifleHip");
-			//AnimInstance->Montage_JumpToSection(SectionName);
+			AnimInstance->Montage_JumpToSection(SectionName);
 		}
 	}
 }

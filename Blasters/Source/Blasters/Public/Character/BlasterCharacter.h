@@ -22,6 +22,9 @@ public:
 
 	//ActorComponent初始完成后调用的函数
 	virtual void PostInitializeComponents() override;
+
+	void PlayFireMontage(bool bAiming);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -34,6 +37,8 @@ protected:
 	void AimButtonPressed();
 	void AimButtonReleased();
 	virtual void Jump() override;
+	void FireButtonPressed();
+	void FireButtonReleased();
 
 
 	
@@ -81,6 +86,11 @@ private:
 	FRotator StartAimRotator;
 
 	ETurningInPlace TurningInPlace;
+
+	//开火蒙太奇
+	UPROPERTY(EditAnywhere,Category = "Combat")
+	class UAnimMontage* FireWeaponMontage;
+
 
 public:	
 	//FORCEINLINE 关键字的作用是告诉编译器，它需要强制将函数内联,一般用于逻辑简单的函数
