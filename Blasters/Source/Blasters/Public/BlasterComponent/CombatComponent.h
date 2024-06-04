@@ -34,6 +34,8 @@ protected:
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
 
+	void FireButtonPressed(bool bPressed);
+
 	//服务器上开火
 	UFUNCTION(Server,Reliable)
 	void Server_Fire();
@@ -41,6 +43,9 @@ protected:
 	//网络组播  要加_Implementation   在服务器和所有客户端都会调用
 	UFUNCTION(NetMulticast,Reliable)
 	void MulticastFire();
+
+	//以屏幕中心作为准星
+	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
 private:
 	class ABlasterCharacter* Character;
@@ -63,6 +68,6 @@ private:
 
 public:	
 	void EquipWeapon(AWeapon* WeaponToEquip);
-	void FireButtonPressed(bool bPressed);
+
 		
 };

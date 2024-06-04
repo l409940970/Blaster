@@ -8,13 +8,15 @@
 #include "Components/SphereComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
 
-
+#define TRACE_LENGTH 80000.f
 
 UCombatComponent::UCombatComponent()
 {
 
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 
 	BaseWalkSpeed = 600.f;
 	AimWaklSpeed = 400.f;
@@ -82,6 +84,8 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	FHitResult HitResult;
+	TraceUnderCrosshairs(HitResult);
 }
 
 //这个函数是在服务器执行
@@ -109,16 +113,6 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 
 }
 
-void UCombatComponent::FireButtonPressed(bool bPressed)
-{
-	bFireButtonPressed = bPressed;
-	if (bFireButtonPressed)
-	{
-		//开火逻辑在服务器执行，同步到客户端
-		Server_Fire();
-	}
-}
-
 void UCombatComponent::Server_Fire_Implementation()
 {
 	//服务器中调用组播
@@ -131,4 +125,65 @@ void UCombatComponent::MulticastFire_Implementation()
 	EquippedWeapon->Fire();
 } 
 
+void UCombatComponent::FireButtonPressed(bool bPressed)
+{
+	bFireButtonPressed = bPressed;
+	if (bFireButtonPressed)
+	{
+		//开火逻辑在服务器执行，同步到客户端
+		Server_Fire();
+	}
+}
 
+void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
+{
+	FVector2D ViewportSize;
+	//获取屏幕大小
+	if (GEngine && GEngine->GameViewport)
+	{
+		GEngine->GameViewport->GetViewportSize(ViewportSize);
+	}
+
+	FVector2D CrosshairLocation(ViewportSize.X / 2, ViewportSize.Y / 2);
+	//屏幕位置转换后的世界位置
+	FVector CrosshairWorldPosition;
+	//屏幕位置转换后的方向
+	FVector CrosshairWorldDirection;
+
+	//DeprojectScreenToWorld将屏幕坐标转换为世界坐标
+	bool bScreenToWorld = UGameplayStatics::DeprojectScreenToWorld(
+		UGameplayStatics::GetPlayerController(this, 0),
+		CrosshairLocation,
+		CrosshairWorldPosition,
+		CrosshairWorldDirection
+	);
+
+	if (bScreenToWorld)
+	{
+		FVector Start = CrosshairWorldPosition;
+		FVector End = Start + CrosshairWorldDirection * TRACE_LENGTH;
+		//以屏幕中心在世界的位置为起点进行射线检测
+		GetWorld()->LineTraceSingleByChannel(
+			TraceHitResult,
+			Start,
+			End,
+			ECollisionChannel::ECC_Visibility
+		);
+
+		if (!TraceHitResult.bBlockingHit)
+		{
+			TraceHitResult.ImpactPoint = End;
+		}
+		else
+		{
+			//在检测到的地方绘制一个球体
+			DrawDebugSphere(
+				GetWorld(),
+				TraceHitResult.ImpactPoint,
+				12.f,
+				12,
+				FColor::Red
+			);
+		}
+	}
+}
