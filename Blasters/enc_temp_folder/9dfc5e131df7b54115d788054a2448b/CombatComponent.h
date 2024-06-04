@@ -34,14 +34,6 @@ protected:
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
 
-	//服务器上开火
-	UFUNCTION(Server,Reliable)
-	void Server_Fire();
-
-	//网络组播  要加_Implementation   在服务器和所有客户端都会调用
-	UFUNCTION(NetMulticast,Reliable)
-	void MulticastFire();
-
 private:
 	class ABlasterCharacter* Character;
 

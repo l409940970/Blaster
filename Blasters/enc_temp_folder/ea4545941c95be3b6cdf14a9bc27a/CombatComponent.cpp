@@ -21,15 +21,6 @@ UCombatComponent::UCombatComponent()
 
 }
 
-void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(UCombatComponent, EquippedWeapon);
-	DOREPLIFETIME(UCombatComponent, bAiming);
-
-}
-
 void UCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -76,11 +67,18 @@ void UCombatComponent::OnRep_EquippedWeapon()
 	}
 }
 
-
-
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+}
+
+void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UCombatComponent, EquippedWeapon);
+	DOREPLIFETIME(UCombatComponent, bAiming);
 
 }
 
@@ -111,24 +109,15 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 
 void UCombatComponent::FireButtonPressed(bool bPressed)
 {
+
 	bFireButtonPressed = bPressed;
 	if (bFireButtonPressed)
 	{
-		//开火逻辑在服务器执行，同步到客户端
-		Server_Fire();
+		Character->PlayFireMontage(bAiming);
+		EquippedWeapon->Fire();
 	}
 }
 
-void UCombatComponent::Server_Fire_Implementation()
-{
-	//服务器中调用组播
-	MulticastFire();
-}
 
-void UCombatComponent::MulticastFire_Implementation()
-{
-	Character->PlayFireMontage(bAiming);
-	EquippedWeapon->Fire();
-} 
 
 
