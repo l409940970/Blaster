@@ -11,7 +11,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 
-#define TRACE_LENGTH 80000.f
 
 UCombatComponent::UCombatComponent()
 {
@@ -122,7 +121,7 @@ void UCombatComponent::Server_Fire_Implementation()
 void UCombatComponent::MulticastFire_Implementation()
 {
 	Character->PlayFireMontage(bAiming);
-	EquippedWeapon->Fire();
+	EquippedWeapon->Fire(HitTarget);
 } 
 
 void UCombatComponent::FireButtonPressed(bool bPressed)
@@ -185,5 +184,7 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 				FColor::Red
 			);
 		}
+		//»÷ÖÐÎ»ÖÃ
+		HitTarget = TraceHitResult.ImpactPoint;
 	}
 }

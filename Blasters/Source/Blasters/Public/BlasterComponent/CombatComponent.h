@@ -7,6 +7,10 @@
 #include "CombatComponent.generated.h"
 
 
+#define TRACE_LENGTH 80000.f
+
+
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BLASTERS_API UCombatComponent : public UActorComponent
 {
@@ -65,6 +69,9 @@ private:
 	float AimWaklSpeed;
 
 	bool bFireButtonPressed;
+
+	//准星射线检测到的位置
+	FVector HitTarget;
 
 public:	
 	void EquipWeapon(AWeapon* WeaponToEquip);
