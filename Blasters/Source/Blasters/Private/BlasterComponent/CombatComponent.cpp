@@ -85,6 +85,7 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 	FHitResult HitResult;
 	TraceUnderCrosshairs(HitResult);
+
 }
 
 //这个函数是在服务器执行
@@ -112,16 +113,16 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 
 }
 
-void UCombatComponent::Server_Fire_Implementation()
+void UCombatComponent::Server_Fire_Implementation(const FVector_NetQuantize& TraceHitTarget)
 {
 	//服务器中调用组播
-	MulticastFire();
+	MulticastFire(TraceHitTarget);
 }
 
-void UCombatComponent::MulticastFire_Implementation()
+void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
 {
 	Character->PlayFireMontage(bAiming);
-	EquippedWeapon->Fire(HitTarget);
+	EquippedWeapon->Fire(TraceHitTarget);
 } 
 
 void UCombatComponent::FireButtonPressed(bool bPressed)
@@ -129,8 +130,12 @@ void UCombatComponent::FireButtonPressed(bool bPressed)
 	bFireButtonPressed = bPressed;
 	if (bFireButtonPressed)
 	{
+		//开火前检测目标点
+		FHitResult HitResult;
+		TraceUnderCrosshairs(HitResult);
+
 		//开火逻辑在服务器执行，同步到客户端
-		Server_Fire();
+		Server_Fire(HitResult.ImpactPoint);
 	}
 }
 
