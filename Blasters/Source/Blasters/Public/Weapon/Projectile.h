@@ -15,11 +15,15 @@ public:
 	AProjectile();
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void Destroyed() override;
 
 
 protected:
 	virtual void BeginPlay() override;
 
+	//子弹命中
+	UFUNCTION()
+	virtual void OnHit(UPrimitiveComponent* HitComp,AActor* OtherActor,UPrimitiveComponent* OtherComp,FVector NormalImpulsem, const FHitResult& Hit);
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -33,6 +37,13 @@ private:
 	class UParticleSystem* Tracer;
 
 	class UParticleSystemComponent* TracerComponent;
+
+	//命中特效
+	UPROPERTY(EditAnywhere)
+	class UParticleSystem* ImpactParticles;
+	//命中音效
+	UPROPERTY(EditAnywhere)
+	class USoundCue* ImpactSound;
 
 public:	
 
