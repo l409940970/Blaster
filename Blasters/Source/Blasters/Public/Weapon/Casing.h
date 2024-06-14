@@ -17,10 +17,26 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	virtual void Destroyed() override;
+
+
+	UFUNCTION()
+	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulsem, const FHitResult& Hit);
+
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* CasingMesh;
 
+	//µØø«≥Â¡ø
+	UPROPERTY(EditAnywhere)
+	float ShellEjectionImpulse = 15.f;
+
+	//¬‰µÿ“Ù–ß
+	UPROPERTY(EditAnywhere)
+	class USoundCue* ShellSound;
+
 
 public:	
+
 };

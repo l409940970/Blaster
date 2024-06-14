@@ -4,6 +4,7 @@
 #include "Weapon/Casing.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
+#include "TimerManager.h"
 
 ACasing::ACasing()
 {
@@ -15,7 +16,6 @@ ACasing::ACasing()
 	CasingMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	CasingMesh->SetSimulatePhysics(true);
 	CasingMesh->SetEnableGravity(true);
-	//物体是否能进行模拟命中事件
 	CasingMesh->SetNotifyRigidBodyCollision(true);
 }
 
@@ -29,17 +29,15 @@ void ACasing::BeginPlay()
 
 void ACasing::Destroyed()
 {
-	Super::Destroyed();
-	if (ShellSound)
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, ShellSound, GetActorLocation());
-	}
 }
 
 void ACasing::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulsem, const FHitResult& Hit)
 {
 	Destroy();
-
+	if (ShellSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, ShellSound, GetActorLocation());
+	}
 }
 
 
