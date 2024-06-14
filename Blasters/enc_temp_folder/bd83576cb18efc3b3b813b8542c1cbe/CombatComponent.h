@@ -51,13 +51,8 @@ protected:
 	//以屏幕中心作为准星
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
-	//绘制准星
-	void SetHUDCrosshairs(float DeltaTime);
-
 private:
 	class ABlasterCharacter* Character;
-	class ABlasterPlayerController* Controller;
-	class ABlasterHUD* HUD;
 
 	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
 	class AWeapon* EquippedWeapon;
