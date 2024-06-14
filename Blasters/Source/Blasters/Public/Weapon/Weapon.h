@@ -70,12 +70,15 @@ private:
 	UFUNCTION()
 	void OnRep_WeaponState();
 
-
+	//Ê°È¡ui
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	class UWidgetComponent* PickUpWidget;
 	//¿ª»ð¶¯»­
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	class UAnimationAsset* FireAnimation;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class ACasing> CasingClass;
 
 public:		
 
