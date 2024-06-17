@@ -78,6 +78,9 @@ private:
 	//准星射线检测到的位置
 	FVector HitTarget;
 
+	//角色在跑步时准星扩散的值
+	float CrosshairVelocityFactor;
+	float CrosshairInAirFactor;
 public:	
 	void EquipWeapon(AWeapon* WeaponToEquip);
 
