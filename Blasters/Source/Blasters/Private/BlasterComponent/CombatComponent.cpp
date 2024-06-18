@@ -84,11 +84,14 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	//检测准星命中点，测试用
-	FHitResult HitResult;
-	TraceUnderCrosshairs(HitResult);
-
 	SetHUDCrosshairs(DeltaTime);
+
+	//检测准星命中点，测试用
+	if (Character && Character->IsLocallyControlled())
+	{
+		FHitResult HitResult;
+		TraceUnderCrosshairs(HitResult);
+	}
 
 }
 
