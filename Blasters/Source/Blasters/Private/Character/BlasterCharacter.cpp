@@ -354,6 +354,16 @@ FVector ABlasterCharacter::GetHitTarget() const
 	return FVector();
 }
 
+float ABlasterCharacter::GetFollowCameraFOV() const
+{
+	return FollowCamera->FieldOfView;
+}
+
+void ABlasterCharacter::SetFollowCameraFOV(float FOV) const
+{
+	FollowCamera->SetFieldOfView(FOV);
+}
+
 //¿Í»§¶ËÖ´ÐÐ
 void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 {

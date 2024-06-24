@@ -94,11 +94,20 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	TSubclassOf<class ACasing> CasingClass;
 
+	//瞄准时的fov
+	UPROPERTY(EditAnywhere)
+	float ZoomFOV= 30.f;
+	UPROPERTY(EditAnywhere)
+	//fov切换速度
+	float ZoomInterSpeed = 20.f;
+
 
 public:		
 
 	void SetWeaponState(EWeaponState State);
 	USphereComponent* GetAreaSphere()const;
 	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
+	FORCEINLINE float GetZoomedFOV() const{ return ZoomFOV; }
+	FORCEINLINE float GetZoomInterpSpeed() const { return ZoomInterSpeed; }
 
 };

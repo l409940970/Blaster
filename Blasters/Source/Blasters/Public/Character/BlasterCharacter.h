@@ -107,4 +107,7 @@ public:
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }
 
 	FVector GetHitTarget() const;
+
+	float GetFollowCameraFOV() const;
+	void SetFollowCameraFOV(float FOV) const;
 };

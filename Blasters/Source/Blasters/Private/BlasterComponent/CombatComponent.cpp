@@ -38,6 +38,8 @@ void UCombatComponent::BeginPlay()
 	if (Character)
 	{
 		Character->GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
+		DefaultFOV = Character->GetFollowCameraFOV();
+		CurFOV = DefaultFOV;
 	}
 	
 }
@@ -84,15 +86,36 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	SetHUDCrosshairs(DeltaTime);
 
 	//检测准星命中点，测试用
 	if (Character && Character->IsLocallyControlled())
 	{
 		FHitResult HitResult;
 		TraceUnderCrosshairs(HitResult);
+
+		SetHUDCrosshairs(DeltaTime);
+		InterpFOV(DeltaTime);
 	}
 
+}
+
+void UCombatComponent::InterpFOV(float DeltaTime)
+{
+	if (EquippedWeapon == nullptr || Character == nullptr)
+	{
+		return;
+	}
+
+	if (bAiming)
+	{
+		CurFOV = FMath::FInterpTo(CurFOV, EquippedWeapon->GetZoomedFOV(), DeltaTime, EquippedWeapon->GetZoomInterpSpeed());
+	}
+	else
+	{
+		CurFOV = FMath::FInterpTo(CurFOV, DefaultFOV, DeltaTime, ZoomInterpSpeed);
+	}
+
+	Character->SetFollowCameraFOV(CurFOV);
 }
 
 //这个函数是在服务器执行

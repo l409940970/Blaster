@@ -81,6 +81,17 @@ private:
 	//角色在跑步时准星扩散的值
 	float CrosshairVelocityFactor;
 	float CrosshairInAirFactor;
+
+	//不喵准时的默认FOV
+	float DefaultFOV;
+	float CurFOV;
+	UPROPERTY(EditAnywhere)
+	float ZoomFOV = 30.f;
+	UPROPERTY(EditAnywhere)
+	float ZoomInterpSpeed = 20.f;
+
+	void InterpFOV(float DeltaTime);
+
 public:	
 	void EquipWeapon(AWeapon* WeaponToEquip);
 
