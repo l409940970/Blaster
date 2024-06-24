@@ -164,10 +164,8 @@ void UCombatComponent::FireButtonPressed(bool bPressed)
 		FHitResult HitResult;
 		TraceUnderCrosshairs(HitResult);
 
-		CrosshairShootFactor = 1.f;
 		//开火逻辑在服务器执行，同步到客户端
 		Server_Fire(HitResult.ImpactPoint);
-
 	}
 }
 
@@ -274,22 +272,8 @@ void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
 			{
 				CrosshairInAirFactor = FMath::FInterpTo(CrosshairInAirFactor, 0.f, DeltaTime, 30.f);
 			}
-			if (bAiming)
-			{
-				CrosshairAimFactor = FMath::FInterpTo(CrosshairAimFactor, 0.58f, DeltaTime,30.f);
-			}
-			else
-			{
-				CrosshairAimFactor = FMath::FInterpTo(CrosshairAimFactor, 0.f, DeltaTime, 30.f);
-			}
-			CrosshairShootFactor = FMath::FInterpTo(CrosshairShootFactor, 0.f, DeltaTime, 40.f);
 
-			float Spread = 
-				0.5f+
-				CrosshairInAirFactor + 
-				CrosshairVelocityFactor -
-				CrosshairAimFactor  +
-				CrosshairShootFactor;
+			float Spread = CrosshairInAirFactor + CrosshairVelocityFactor;
 
 			HUD->SetHUDPackage(HUDPackage,Spread);
 		}

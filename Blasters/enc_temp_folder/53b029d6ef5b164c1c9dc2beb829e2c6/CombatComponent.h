@@ -81,8 +81,6 @@ private:
 	//角色在跑步时准星扩散的值
 	float CrosshairVelocityFactor;
 	float CrosshairInAirFactor;
-	float CrosshairAimFactor;
-	float CrosshairShootFactor;
 
 	//不喵准时的默认FOV
 	float DefaultFOV;
