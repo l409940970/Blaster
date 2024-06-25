@@ -45,7 +45,7 @@ protected:
 	UFUNCTION(Server,Reliable)
 	void Server_Fire(const FVector_NetQuantize& TraceHitTarget);
 
-	//网络组播  要加_Implementation   在服务器和所有客户端都会调用
+	//网络组播  要加_Implementation  在服务器和所有客户端都会执行
 	UFUNCTION(NetMulticast,Reliable)
 	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
 

@@ -12,6 +12,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Character/BlasterAnimInstance.h"
+#include "Blasters/Blasters.h"
 
 ABlasterCharacter::ABlasterCharacter()
 {
@@ -47,6 +48,7 @@ ABlasterCharacter::ABlasterCharacter()
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
+	GetMesh()->SetCollisionObjectType(ECC_SKeletaMesh);
 
 	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
 
@@ -418,6 +420,25 @@ void ABlasterCharacter::PlayFireMontage(bool bAiming)
 			FName SectionName;
 			SectionName = bAiming ? FName("RifleAim") : FName("RifleHip");
 			//通过蒙太奇片段名称播放不同的动画
+			AnimInstance->Montage_JumpToSection(SectionName);
+		}
+	}
+}
+
+void ABlasterCharacter::Multicast_Hit_Implementation()
+{
+	PlayHitMontage();
+}
+
+void ABlasterCharacter::PlayHitMontage()
+{
+	if (IsWeaponEquipped())
+	{
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		if (AnimInstance && HitReactMontage)
+		{
+			AnimInstance->Montage_Play(HitReactMontage);
+			FName SectionName("FromFront");
 			AnimInstance->Montage_JumpToSection(SectionName);
 		}
 	}

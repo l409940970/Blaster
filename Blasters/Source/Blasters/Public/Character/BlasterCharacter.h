@@ -25,6 +25,8 @@ public:
 	virtual void PostInitializeComponents() override;
 
 	void PlayFireMontage(bool bAiming);
+	UFUNCTION(NetMulticast, Unreliable)
+	void Multicast_Hit();
 
 protected:
 	virtual void BeginPlay() override;
@@ -91,11 +93,16 @@ private:
 	//开火蒙太奇
 	UPROPERTY(EditAnywhere,Category = "Combat")
 	class UAnimMontage* FireWeaponMontage;
+	//受击蒙太奇
+	UPROPERTY(EditAnywhere,Category = Combat)
+	UAnimMontage* HitReactMontage;
 
 	//当相机与角色之间的位置低于这个值时，隐藏角色模型，用于角色卡墙体
 	UPROPERTY(EditAnywhere, Category = Camera)
 	float CameraThreshold = 200.f;
 	void HideCameraIfCharacterClose();
+
+	void PlayHitMontage();
 
 public:	
 	//FORCEINLINE 关键字的作用是告诉编译器，它需要强制将函数内联,一般用于逻辑简单的函数
