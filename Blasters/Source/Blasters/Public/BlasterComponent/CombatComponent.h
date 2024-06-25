@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "HUD/BlasterHUD.h"
 #include "CombatComponent.generated.h"
 
 
@@ -77,6 +78,8 @@ private:
 
 	//准星射线检测到的位置
 	FVector HitTarget;
+
+	FHUDPackage HUDPackage;
 
 	//角色在跑步时准星扩散的值
 	float CrosshairVelocityFactor;

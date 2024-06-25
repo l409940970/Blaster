@@ -52,6 +52,7 @@ void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 
+
 	ShowPickupWidget(false);
 
 	//HasAuthority（）:判断是否是服务端

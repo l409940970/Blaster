@@ -11,7 +11,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "PlayerController/BlasterPlayerController.h"
-#include "HUD/BlasterHUD.h"
+#include "Interfaces/InteractWithCrosshairInterface.h"
+
 
 UCombatComponent::UCombatComponent()
 {
@@ -164,8 +165,10 @@ void UCombatComponent::FireButtonPressed(bool bPressed)
 		FHitResult HitResult;
 		TraceUnderCrosshairs(HitResult);
 
+		CrosshairShootFactor = 1.f;
 		//开火逻辑在服务器执行，同步到客户端
 		Server_Fire(HitResult.ImpactPoint);
+
 	}
 }
 
@@ -203,7 +206,7 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 			End,
 			ECollisionChannel::ECC_Visibility
 		);
-
+		//测试用
 		if (!TraceHitResult.bBlockingHit)
 		{
 			TraceHitResult.ImpactPoint = End;
@@ -219,8 +222,19 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 				FColor::Red
 			);
 		}
+
 		//击中位置
 		HitTarget = TraceHitResult.ImpactPoint;
+
+		//击中玩家后准星颜色改变:实现UInteractWithCrosshairInterface接口的玩家
+		if (TraceHitResult.GetActor() && TraceHitResult.GetActor()->Implements<UInteractWithCrosshairInterface>())
+		{
+			HUDPackage.CrosshairColor = FLinearColor::Red;
+		}
+		else
+		{
+			HUDPackage.CrosshairColor = FLinearColor::White;
+		}
 	}
 }
 
@@ -237,7 +251,6 @@ void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
 		if (HUD)
 		{
 			
-			FHUDPackage HUDPackage;
 			if (EquippedWeapon)
 			{
 				HUDPackage.CrosshairsCenter = EquippedWeapon->CrosshairsCenter;
@@ -272,8 +285,22 @@ void UCombatComponent::SetHUDCrosshairs(float DeltaTime)
 			{
 				CrosshairInAirFactor = FMath::FInterpTo(CrosshairInAirFactor, 0.f, DeltaTime, 30.f);
 			}
+			if (bAiming)
+			{
+				CrosshairAimFactor = FMath::FInterpTo(CrosshairAimFactor, 0.58f, DeltaTime,30.f);
+			}
+			else
+			{
+				CrosshairAimFactor = FMath::FInterpTo(CrosshairAimFactor, 0.f, DeltaTime, 30.f);
+			}
+			CrosshairShootFactor = FMath::FInterpTo(CrosshairShootFactor, 0.f, DeltaTime, 40.f);
 
-			float Spread = CrosshairInAirFactor + CrosshairVelocityFactor;
+			float Spread = 
+				0.5f+
+				CrosshairInAirFactor + 
+				CrosshairVelocityFactor -
+				CrosshairAimFactor  +
+				CrosshairShootFactor;
 
 			HUD->SetHUDPackage(HUDPackage,Spread);
 		}

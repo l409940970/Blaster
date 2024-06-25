@@ -20,6 +20,8 @@ public:
 
 	//准星的浮动范围
 	float CrosshairSpread;
+	//准星颜色
+	FLinearColor CrosshairColor;
 };
 
 UCLASS()
@@ -34,7 +36,7 @@ public:
 private:
 	FHUDPackage HUDPackage;
 
-	void DrawCrosshair(UTexture2D* Texture, FVector2D ViewportCenter,FVector2D Spread);
+	void DrawCrosshair(UTexture2D* Texture, FVector2D ViewportCenter,FVector2D Spread, FLinearColor CrosshairColor);
 
 	UPROPERTY(EditAnywhere)
 	float CrosshaitSpreadMax = 16.f;
