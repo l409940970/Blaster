@@ -92,10 +92,6 @@ private:
 	UPROPERTY(EditAnywhere,Category = "Combat")
 	class UAnimMontage* FireWeaponMontage;
 
-	//当相机与角色之间的位置低于这个值时，隐藏角色模型，用于角色卡墙体
-	UPROPERTY(EditAnywhere, Category = Camera)
-	float CameraThreshold = 200.f;
-	void HideCameraIfCharacterClose();
 
 public:	
 	//FORCEINLINE 关键字的作用是告诉编译器，它需要强制将函数内联,一般用于逻辑简单的函数
