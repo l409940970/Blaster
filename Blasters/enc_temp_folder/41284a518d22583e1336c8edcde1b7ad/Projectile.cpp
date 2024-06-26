@@ -54,7 +54,6 @@ void AProjectile::BeginPlay()
 		CollisionBox->OnComponentHit.AddDynamic(this, &ThisClass::OnHit);
 	}
 
-	SetLifeSpan(SpawnTime);
 
 }
 void AProjectile::Tick(float DeltaTime)
@@ -65,20 +64,16 @@ void AProjectile::Tick(float DeltaTime)
 
 void AProjectile::Destroyed()
 {
-	if (isHitDestroy)
+
+	if (ImpactParticles)
 	{
-
-		if (ImpactParticles)
-		{
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticles, GetActorTransform());
-		}
-
-		if (ImpactSound)
-		{
-			UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation());
-		}
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticles, GetActorTransform());
 	}
 
+	if (ImpactSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation());
+	}
 	Super::Destroyed();
 }
 
@@ -89,7 +84,6 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	{
 		BlasterCharacter->Multicast_Hit();
 	}
-	isHitDestroy = true;
 	//Destroy在底层实现了同步，所以播放特效这些需要同步的逻辑可以做Destroy里面处理，能够减少额外的同步
 	Destroy();
 }

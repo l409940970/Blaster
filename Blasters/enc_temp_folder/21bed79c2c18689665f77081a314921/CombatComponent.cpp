@@ -12,7 +12,6 @@
 #include "DrawDebugHelpers.h"
 #include "PlayerController/BlasterPlayerController.h"
 #include "Interfaces/InteractWithCrosshairInterface.h"
-#include "TimerManager.h"
 
 
 UCombatComponent::UCombatComponent()
@@ -89,9 +88,9 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 
+	//检测准星命中点，测试用
 	if (Character && Character->IsLocallyControlled())
 	{
-		//检测准星命中点
 		FHitResult HitResult;
 		TraceUnderCrosshairs(HitResult);
 
@@ -118,30 +117,6 @@ void UCombatComponent::InterpFOV(float DeltaTime)
 	}
 
 	Character->SetFollowCameraFOV(CurFOV);
-}
-
-void UCombatComponent::StartFireTimer()
-{
-	if (EquippedWeapon == nullptr || Character == nullptr)
-	{
-		return;
-	}
-	Character->GetWorldTimerManager().SetTimer(
-		FireTimerHandle,
-		this, 
-		&UCombatComponent::FireTimerFinishied, 
-		EquippedWeapon->FireDelay
-	);
-
-}
-
-void UCombatComponent::FireTimerFinishied()
-{
-	bCanFire = true;
-	if (bFireButtonPressed && EquippedWeapon->bAutomatic)
-	{
-		Fire();
-	}
 }
 
 //这个函数是在服务器执行
@@ -186,28 +161,15 @@ void UCombatComponent::FireButtonPressed(bool bPressed)
 	bFireButtonPressed = bPressed;
 	if (bFireButtonPressed)
 	{
-		Fire();
-	}
-
-}
-
-void UCombatComponent::Fire()
-{
-
-	if (bCanFire)
-	{
-		bCanFire = false;
-		////开火前检测目标点
-		//FHitResult HitResult;
-		//TraceUnderCrosshairs(HitResult);
+		//开火前检测目标点
+		FHitResult HitResult;
+		TraceUnderCrosshairs(HitResult);
 
 		CrosshairShootFactor = 1.f;
 		//开火逻辑在服务器执行，同步到客户端
-		Server_Fire(HitTarget);
+		Server_Fire(HitResult.ImpactPoint);
 
-		StartFireTimer();
 	}
-
 }
 
 void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
@@ -268,7 +230,7 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 			);
 		}
 
-		//击中位置,
+		//击中位置
 		HitTarget = TraceHitResult.ImpactPoint;
 
 		//击中玩家后准星颜色改变:实现UInteractWithCrosshairInterface接口的玩家

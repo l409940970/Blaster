@@ -38,8 +38,8 @@ protected:
 	
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
+
 	void FireButtonPressed(bool bPressed);
-	void Fire();
 
 	//服务器上开火
 	UFUNCTION(Server,Reliable)
@@ -97,13 +97,8 @@ private:
 
 	void InterpFOV(float DeltaTime);
 
-	//自动fire
-	FTimerHandle FireTimerHandle;
-	bool bCanFire = true;
-	void StartFireTimer();
-	void FireTimerFinishied();
-
 public:	
 	void EquipWeapon(AWeapon* WeaponToEquip);
+
 		
 };

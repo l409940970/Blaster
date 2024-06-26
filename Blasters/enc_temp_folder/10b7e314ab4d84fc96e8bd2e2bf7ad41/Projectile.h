@@ -45,11 +45,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	class USoundCue* ImpactSound;
 
-	bool isHitDestroy ;
-
-	UPROPERTY(EditAnywhere)
-	float SpawnTime = 3.f;
-
 public:	
 
 
