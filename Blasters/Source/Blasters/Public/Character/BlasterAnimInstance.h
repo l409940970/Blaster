@@ -64,7 +64,9 @@ private:
 	FRotator RightHandRotation;
 	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	bool isLocallyCharacter;
-
+	//ÊÇ·ñÐý×ª¸ù¹Ç÷À
+	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	bool bRotateRootBone;
 	//
 	FRotator DeltaRotation;
 	FRotator CharacterRotationLastFrame;

@@ -28,6 +28,9 @@ public:
 	UFUNCTION(NetMulticast, Unreliable)
 	void Multicast_Hit();
 
+	//底层是用于同步角色的移动，这里用来同步角色的转向，因为SimProxiesTurn是tick执行的，但是在同步过程中不能没帧都同步过去，会导致问题
+	virtual void OnRep_ReplicatedMovement() override;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -79,7 +82,11 @@ private:
 
 	//瞄准偏移
 	void AimOffset(float DeltaTime);
+	void CalculateAO_Pitch();
+	float CalculateSpeed();
 	void TurnInPlace(float DeltaTime);
+	//模拟代理端的玩家转向逻辑
+	void SimProxiesTurn();
 
 	//瞄准偏移
 	float AO_Yaw;
@@ -103,6 +110,16 @@ private:
 	void HideCameraIfCharacterClose();
 
 	void PlayHitMontage();
+	//是否旋转根骨骼
+	bool bRotateRootBone;
+	//模拟端用于转向的值
+	float TurnThreshold = 0.5f;
+	FRotator ProxyRotationLastFrame;
+	FRotator ProxyRotation;
+	float ProxyYaw;
+	//用于同步转向的周期
+	float TimeSinceLastMovementReplication;
+
 
 public:	
 	//FORCEINLINE 关键字的作用是告诉编译器，它需要强制将函数内联,一般用于逻辑简单的函数
@@ -122,4 +139,6 @@ public:
 
 	float GetFollowCameraFOV() const;
 	void SetFollowCameraFOV(float FOV) const;
+
+	FORCEINLINE bool ShouldRotateRootBone() const { return bRotateRootBone; }
 };

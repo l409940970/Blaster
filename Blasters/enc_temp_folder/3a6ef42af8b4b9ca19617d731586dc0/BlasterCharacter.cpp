@@ -361,21 +361,23 @@ void ABlasterCharacter::SimProxiesTurn()
 	ProxyRotation = GetActorRotation();
 	//两个rot的差量
 	ProxyYaw = UKismetMathLibrary::NormalizedDeltaRotator(ProxyRotation, ProxyRotationLastFrame).Yaw;
-
-
-	//有个bug TODO：当缓慢移动鼠标时，模拟代理端的角色会抽搐
-	if (ProxyYaw > TurnThreshold)
+	if (FMath::Abs(ProxyYaw) > TurnThreshold)
 	{
-		TurningInPlace = ETurningInPlace::ETIP_Right;
+		if (ProxyYaw > TurnThreshold)
+		{
+			TurningInPlace = ETurningInPlace::ETIP_Right;
+		}
+		else if (ProxyYaw < -TurnThreshold)
+		{
+			TurningInPlace = ETurningInPlace::ETIP_Left;
+		}
+		else
+		{
+			TurningInPlace = ETurningInPlace::ETIP_NotTurning;
+		}
+		return;
 	}
-	else if (ProxyYaw < -TurnThreshold)
-	{
-		TurningInPlace = ETurningInPlace::ETIP_Left;
-	}
-	else
-	{
-		TurningInPlace = ETurningInPlace::ETIP_NotTurning;
-	}
+	TurningInPlace = ETurningInPlace::ETIP_NotTurning;
 
 }
 
