@@ -8,6 +8,6 @@ void ABlasterGameMode::PlayerEliminated(ABlasterCharacter* ElimmedCharacter, ABl
 {
 	if (ElimmedCharacter)
 	{
-		ElimmedCharacter->Multicast_Elim();
+		ElimmedCharacter->Elim();
 	}
 }

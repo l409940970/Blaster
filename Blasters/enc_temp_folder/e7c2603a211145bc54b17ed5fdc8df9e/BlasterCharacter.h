@@ -35,8 +35,7 @@ public:
 
 
 	//Ã‘Ã≠
-	UFUNCTION(NetMulticast,Reliable)
-	void Multicast_Elim();
+	void Elim();
 
 protected:
 	virtual void BeginPlay() override;

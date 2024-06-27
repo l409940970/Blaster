@@ -14,4 +14,9 @@ class BLASTERS_API ABlasterGameMode : public AGameMode
 {
 	GENERATED_BODY()
 	
+public:
+
+	//ÕÊº“Ã‘Ã≠
+	virtual void PlayerEliminated(class ABlasterCharacter* ElimmedCharacter, class ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
+
 };

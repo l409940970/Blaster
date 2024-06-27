@@ -67,6 +67,10 @@ private:
 	//是否旋转根骨骼
 	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	bool bRotateRootBone;
+	//是否死亡
+	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	bool bIsElimmed;
+	// 
 	//
 	FRotator DeltaRotation;
 	FRotator CharacterRotationLastFrame;

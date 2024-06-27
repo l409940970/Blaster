@@ -37,6 +37,7 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	bAiming = BlasterChanracter->IsAiming();
 	TurningInPlace = BlasterChanracter->GetTurningInPlace();
 	bRotateRootBone = BlasterChanracter->ShouldRotateRootBone();
+	bIsElimmed = BlasterChanracter->IsElimmed();
 
 	//Rotator在底层已经实现了复制
 	//yawoffset 用于扫射  

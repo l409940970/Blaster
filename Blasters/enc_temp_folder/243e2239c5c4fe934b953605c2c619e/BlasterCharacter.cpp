@@ -14,6 +14,7 @@
 #include "Character/BlasterAnimInstance.h"
 #include "Blasters/Blasters.h"
 #include "PlayerController/BlasterPlayerController.h"
+#include "GameMode/BlasterGameMode.h"
 
 ABlasterCharacter::ABlasterCharacter()
 {
@@ -266,6 +267,15 @@ void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const 
 	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
 	UpdateHUDHealth();
 	PlayHitMontage();
+	if (Health == 0.f)
+	{
+		ABlasterGameMode* BlasterGameMode = GetWorld()->GetAuthGameMode<ABlasterGameMode>();
+		if (BlasterGameMode)
+		{
+			ABlasterPlayerController* AttackController = Cast<ABlasterPlayerController>(InstigatorController);
+			BlasterGameMode->PlayerEliminated(this, BlasterPlayerController, AttackController);
+		}
+	}
 }
 
 void ABlasterCharacter::UpdateHUDHealth()
@@ -275,6 +285,12 @@ void ABlasterCharacter::UpdateHUDHealth()
 	{
 		BlasterPlayerController->SetHUDHealth(Health, MaxHealth);
 	}
+}
+
+void ABlasterCharacter::Elim()
+{
+	bIsElimed = true;
+	PlayElimMontage();
 }
 
 void ABlasterCharacter::AimOffset(float DeltaTime)
@@ -431,6 +447,7 @@ void ABlasterCharacter::HideCameraIfCharacterClose()
 void ABlasterCharacter::OnRep_Health()
 {
 	UpdateHUDHealth();
+	PlayHitMontage();
 }
 
 void ABlasterCharacter::SetOverlappingWeapon(AWeapon* Weapon)
@@ -519,6 +536,15 @@ void ABlasterCharacter::PlayFireMontage(bool bAiming)
 			//通过蒙太奇片段名称播放不同的动画
 			AnimInstance->Montage_JumpToSection(SectionName);
 		}
+	}
+}
+
+void ABlasterCharacter::PlayElimMontage()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && ElimMontage)
+	{
+		AnimInstance->Montage_Play(ElimMontage);
 	}
 }
 
