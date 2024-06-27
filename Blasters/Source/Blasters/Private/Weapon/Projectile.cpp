@@ -84,11 +84,13 @@ void AProjectile::Destroyed()
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulsem, const FHitResult& Hit)
 {
-	ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(OtherActor);
-	if (BlasterCharacter)
-	{
-		BlasterCharacter->Multicast_Hit();
-	}
+	//不使用RPC的方式了，因为属性复制要比RPC快
+	//ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(OtherActor);
+	//if (BlasterCharacter)
+	//{
+	//	BlasterCharacter->Multicast_Hit();
+	//}
+
 	isHitDestroy = true;
 	//Destroy在底层实现了同步，所以播放特效这些需要同步的逻辑可以做Destroy里面处理，能够减少额外的同步
 	Destroy();
