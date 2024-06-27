@@ -22,6 +22,4 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* HealthText;
-
-	void SetHealth(float Health,float MaxHealth);
 };

@@ -130,7 +130,6 @@ private:
 	UFUNCTION()
 	void OnRep_Health();
 
-	class ABlasterPlayerController* BlasterPlayerController;
 
 public:	
 	//FORCEINLINE 关键字的作用是告诉编译器，它需要强制将函数内联,一般用于逻辑简单的函数

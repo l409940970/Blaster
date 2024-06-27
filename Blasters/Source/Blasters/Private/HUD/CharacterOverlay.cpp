@@ -2,4 +2,15 @@
 
 
 #include "HUD/CharacterOverlay.h"
+#include "UMG/Public/Components/ProgressBar.h"
+#include "UMG/Public/Components/TextBlock.h"
 
+void UCharacterOverlay::SetHealth(float Health, float MaxHealth)
+{
+	const float HealthPercent = Health / MaxHealth;
+	HealthBar->SetPercent(HealthPercent);
+
+	FString TextHealth = FString::Printf(TEXT("%d/%d"), FMath::CeilToInt(Health), FMath::CeilToInt(MaxHealth));
+	HealthText->SetText(FText::FromString(TextHealth));
+
+}
