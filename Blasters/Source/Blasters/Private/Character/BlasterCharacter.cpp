@@ -67,6 +67,8 @@ void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	//仅同步给Actor的owner客户端
 	DOREPLIFETIME_CONDITION(ABlasterCharacter, OverlappingWeapon, COND_OwnerOnly);
 
+	DOREPLIFETIME(ABlasterCharacter, Health);
+
 	//同步给所有客户端
 	//DOREPLIFETIME(ABlasterCharacter, OverlappingWeapon);
 }
@@ -117,7 +119,6 @@ void ABlasterCharacter::Tick(float DeltaTime)
 	HideCameraIfCharacterClose();
 }
 
-
 void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -135,7 +136,6 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ThisClass::FireButtonReleased);
 
 }
-
 
 void ABlasterCharacter::MoveForward(float Value)
 {
@@ -379,8 +379,6 @@ void ABlasterCharacter::SimProxiesTurn()
 
 }
 
-
-
 void ABlasterCharacter::HideCameraIfCharacterClose()
 {
 	if (!IsLocallyControlled())
@@ -406,6 +404,10 @@ void ABlasterCharacter::HideCameraIfCharacterClose()
 		}
 	}
 
+}
+
+void ABlasterCharacter::OnRep_Health()
+{
 }
 
 void ABlasterCharacter::SetOverlappingWeapon(AWeapon* Weapon)

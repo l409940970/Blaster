@@ -121,6 +121,16 @@ private:
 	float TimeSinceLastMovementReplication;
 
 
+	//生命
+	UPROPERTY(EditAnywhere, Category = "Player Status", meta = (ClampMin = "0"));
+	float MaxHealth = 100.f;
+	UPROPERTY(ReplicatedUsing = OnRep_Health, VisibleAnywhere,Category = "Player Status")
+	float Health = MaxHealth;
+
+	UFUNCTION()
+	void OnRep_Health();
+
+
 public:	
 	//FORCEINLINE 关键字的作用是告诉编译器，它需要强制将函数内联,一般用于逻辑简单的函数
 	//FORCEINLINE void SetOverlappingWeapon(AWeapon* Weapon) { OverlappingWeapon = Weapon; }
