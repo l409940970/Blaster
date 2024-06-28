@@ -80,6 +80,7 @@ void AWeapon::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 		BlasterCharacter->SetOverlappingWeapon(this);
 	}
 }
+
 void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(OtherActor);
@@ -88,6 +89,7 @@ void AWeapon::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActo
 		BlasterCharacter->SetOverlappingWeapon(nullptr);
 	}
 }
+
 void AWeapon::OnRep_WeaponState()
 {
 	switch (WeaponState)
@@ -97,9 +99,19 @@ void AWeapon::OnRep_WeaponState()
 
 	case EWeaponState::EWS_Equipped:
 		ShowPickupWidget(false);
+
+		WeaponMesh->SetSimulatePhysics(false);
+		WeaponMesh->SetEnableGravity(false);
+		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 		break;
 
 	case EWeaponState::EWS_Dropped:
+
+		WeaponMesh->SetSimulatePhysics(true);
+		WeaponMesh->SetEnableGravity(true);
+		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
 		break;
 
 	case EWeaponState::EWS_MAX:
@@ -119,15 +131,27 @@ void AWeapon::SetWeaponState(EWeaponState State)
 	case EWeaponState::EWS_Equipped:
 		ShowPickupWidget(false);
 		AreaSpere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		WeaponMesh->SetSimulatePhysics(false);
+		WeaponMesh->SetEnableGravity(false);
+		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		break;
+	case  EWeaponState::EWS_Dropped:
+		if (HasAuthority())
+		{
+			AreaSpere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		}
+		WeaponMesh->SetSimulatePhysics(true);
+		WeaponMesh->SetEnableGravity(true);
+		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		break;
 	}
+
 }
 
 USphereComponent* AWeapon::GetAreaSphere() const
 {
 	return AreaSpere;
 }
-
 
 void AWeapon::ShowPickupWidget(bool bShowWidget)
 {
@@ -155,4 +179,13 @@ void AWeapon::Fire(const FVector& HitTarget)
 			GetWorld()->SpawnActor<ACasing>(CasingClass, SocketTransform.GetLocation(), SocketTransform.GetRotation().Rotator());
 		}
 	}
+}
+
+void AWeapon::Dropped()
+{
+	SetWeaponState(EWeaponState::EWS_Dropped);
+
+	FDetachmentTransformRules DetachRules(EDetachmentRule::KeepWorld, true);
+	WeaponMesh->DetachFromComponent(DetachRules);
+	SetOwner(nullptr);
 }

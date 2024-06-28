@@ -291,9 +291,15 @@ void ABlasterCharacter::UpdateHUDHealth()
 	}
 }
 
+//死亡是在gamemode执行的 server端
 void ABlasterCharacter::Elim()
 {
 	Multicast_Elim();
+
+	if (IsWeaponEquipped())
+	{
+		Combat->EquippedWeapon->Dropped();
+	}
 
 	GetWorldTimerManager().SetTimer(
 		ElimTimerHandle,
@@ -309,6 +315,7 @@ void ABlasterCharacter::Multicast_Elim_Implementation()
 	bIsElimed = true;
 	PlayElimMontage();
 
+	//溶解
 	if (DissolveMaterialInstance)
 	{
 		DynamicDissolveMaterialInstance = UMaterialInstanceDynamic::Create(DissolveMaterialInstance, this);
@@ -317,6 +324,18 @@ void ABlasterCharacter::Multicast_Elim_Implementation()
 		DynamicDissolveMaterialInstance->SetScalarParameterValue(TEXT("Glow"), 20.f);
 	}
 	StartDissove();
+
+	//禁止移动和输入
+	GetCharacterMovement()->DisableMovement();
+	GetCharacterMovement()->StopMovementImmediately();
+	if (BlasterPlayerController)
+	{
+		DisableInput(BlasterPlayerController);
+	}
+	//关闭碰撞
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 }
 
 void ABlasterCharacter::ElimTimerFinishied()
