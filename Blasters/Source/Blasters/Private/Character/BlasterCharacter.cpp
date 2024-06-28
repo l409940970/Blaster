@@ -15,6 +15,7 @@
 #include "Blasters/Blasters.h"
 #include "PlayerController/BlasterPlayerController.h"
 #include "GameMode/BlasterGameMode.h"
+#include "TimerManager.h"
 
 ABlasterCharacter::ABlasterCharacter()
 {
@@ -287,10 +288,32 @@ void ABlasterCharacter::UpdateHUDHealth()
 	}
 }
 
+void ABlasterCharacter::Elim()
+{
+	Multicast_Elim();
+
+	GetWorldTimerManager().SetTimer(
+		ElimTimerHandle,
+		this,
+		&ThisClass::ElimTimerFinishied,
+		ElimDelay
+	);
+
+}
+
 void ABlasterCharacter::Multicast_Elim_Implementation()
 {
 	bIsElimed = true;
 	PlayElimMontage();
+}
+
+void ABlasterCharacter::ElimTimerFinishied()
+{
+	ABlasterGameMode* BlasterGameMode = GetWorld()->GetAuthGameMode<ABlasterGameMode>();
+	if (BlasterGameMode)
+	{
+		BlasterGameMode->RequestRespawn(this, Controller);
+	}
 }
 
 void ABlasterCharacter::AimOffset(float DeltaTime)

@@ -35,6 +35,7 @@ public:
 
 
 	//淘汰
+	void Elim();
 	UFUNCTION(NetMulticast,Reliable)
 	void Multicast_Elim();
 
@@ -147,6 +148,10 @@ private:
 	class ABlasterPlayerController* BlasterPlayerController;
 
 	bool bIsElimed = false;
+	FTimerHandle ElimTimerHandle;
+	UPROPERTY(EditAnywhere)
+	float ElimDelay = 3.f;
+	void ElimTimerFinishied();
 
 public:	
 	//FORCEINLINE 关键字的作用是告诉编译器，它需要强制将函数内联,一般用于逻辑简单的函数
