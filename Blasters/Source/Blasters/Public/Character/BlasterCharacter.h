@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "BlasterTypes/TurningInPlace.h"
 #include "Interfaces/InteractWithCrosshairInterface.h"
+#include "Components/TimelineComponent.h"
 #include "BlasterCharacter.generated.h"
 
 UCLASS()
@@ -152,6 +153,26 @@ private:
 	UPROPERTY(EditAnywhere)
 	float ElimDelay = 3.f;
 	void ElimTimerFinishied();
+
+	//溶解
+	UPROPERTY(VisibleAnywhere)
+	UTimelineComponent* DissolveTimeline;
+	//timeline委托句柄
+	FOnTimelineFloat DissolveTrack;
+	//timeline回调函数
+	UFUNCTION()
+	void UpdateDissolveMaterial(float DissolveValue);
+	void StartDissove();
+	//溶解的时间曲线
+	UPROPERTY(EditAnywhere)
+	UCurveFloat* DissolveCurve;
+	//溶解的动态材质实例
+	UPROPERTY(VisibleAnywhere)
+	UMaterialInstanceDynamic* DynamicDissolveMaterialInstance;
+	//角色死亡时将材质修改为溶解材质
+	UPROPERTY(EditAnywhere)
+	UMaterialInstance* DissolveMaterialInstance;
+
 
 public:	
 	//FORCEINLINE 关键字的作用是告诉编译器，它需要强制将函数内联,一般用于逻辑简单的函数

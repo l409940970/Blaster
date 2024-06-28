@@ -59,6 +59,9 @@ ABlasterCharacter::ABlasterCharacter()
 	NetUpdateFrequency = 66.f;
 	MinNetUpdateFrequency = 33.f;
 
+	//»‹Ω‚ ±º‰÷·
+	DissolveTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("DissolveTimeline"));
+
 }
 
 void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -305,6 +308,15 @@ void ABlasterCharacter::Multicast_Elim_Implementation()
 {
 	bIsElimed = true;
 	PlayElimMontage();
+
+	if (DissolveMaterialInstance)
+	{
+		DynamicDissolveMaterialInstance = UMaterialInstanceDynamic::Create(DissolveMaterialInstance, this);
+		GetMesh()->SetMaterial(0, DynamicDissolveMaterialInstance);
+		DynamicDissolveMaterialInstance->SetScalarParameterValue(TEXT("Dissolve"), 1.f);
+		DynamicDissolveMaterialInstance->SetScalarParameterValue(TEXT("Glow"), 20.f);
+	}
+	StartDissove();
 }
 
 void ABlasterCharacter::ElimTimerFinishied()
@@ -313,6 +325,24 @@ void ABlasterCharacter::ElimTimerFinishied()
 	if (BlasterGameMode)
 	{
 		BlasterGameMode->RequestRespawn(this, Controller);
+	}
+}
+
+void ABlasterCharacter::UpdateDissolveMaterial(float DissolveValue)
+{
+	if (DynamicDissolveMaterialInstance)
+	{
+		DynamicDissolveMaterialInstance->SetScalarParameterValue(TEXT("Dissolve"), DissolveValue);
+	}
+}
+
+void ABlasterCharacter::StartDissove()
+{
+	DissolveTrack.BindDynamic(this, &ABlasterCharacter::UpdateDissolveMaterial);
+	if (DissolveCurve && DissolveTimeline)
+	{
+		DissolveTimeline->AddInterpFloat(DissolveCurve, DissolveTrack);
+		DissolveTimeline->Play();
 	}
 }
 
