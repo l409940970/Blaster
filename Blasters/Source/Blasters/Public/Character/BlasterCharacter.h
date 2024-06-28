@@ -40,6 +40,8 @@ public:
 	UFUNCTION(NetMulticast,Reliable)
 	void Multicast_Elim();
 
+	virtual void Destroyed() override;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -172,6 +174,14 @@ private:
 	//角色死亡时将材质修改为溶解材质
 	UPROPERTY(EditAnywhere)
 	UMaterialInstance* DissolveMaterialInstance;
+
+	//死亡特效、音效
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* ElimBotEffect;
+	UPROPERTY(VisibleAnywhere)
+	UParticleSystemComponent* ElimBotComponent;
+	UPROPERTY(EditAnywhere)
+	class USoundCue* ElimBotSound;
 
 
 public:	
