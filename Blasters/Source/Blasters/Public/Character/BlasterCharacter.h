@@ -34,13 +34,19 @@ public:
 	//底层是用于同步角色的移动，这里用来同步角色的转向，因为SimProxiesTurn是tick执行的，但是在同步过程中不能没帧都同步过去，会导致问题
 	virtual void OnRep_ReplicatedMovement() override;
 
+	//击杀
+	void AddScore();
+	UFUNCTION(NetMulticast, Reliable)
+	void Multicast_AddScore();
 
 	//淘汰
 	void Elim();
+
 	UFUNCTION(NetMulticast,Reliable)
 	void Multicast_Elim();
 
 	virtual void Destroyed() override;
+
 
 protected:
 	virtual void BeginPlay() override;
@@ -63,6 +69,7 @@ protected:
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
 	void UpdateHUDHealth();
+	void PollInit();
 
 private:
 	UPROPERTY(VisibleAnywhere,Category = Camera)
@@ -182,6 +189,10 @@ private:
 	UParticleSystemComponent* ElimBotComponent;
 	UPROPERTY(EditAnywhere)
 	class USoundCue* ElimBotSound;
+
+	class ABlasterPlayerState* BlasterPlayerState;
+
+
 
 
 public:	

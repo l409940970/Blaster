@@ -14,3 +14,9 @@ void UCharacterOverlay::SetHealth(float Health, float MaxHealth)
 	HealthText->SetText(FText::FromString(TextHealth));
 
 }
+
+void UCharacterOverlay::SetScore(float Score)
+{
+	FString TextScore = FString::Printf(TEXT("%d"), FMath::FloorToInt(Score));
+	ScoreAmount->SetText(FText::FromString(TextScore));
+}

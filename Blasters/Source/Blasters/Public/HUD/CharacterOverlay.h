@@ -22,6 +22,9 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* HealthText;
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* ScoreAmount;
 
 	void SetHealth(float Health,float MaxHealth);
+	void SetScore(float Score);
 };

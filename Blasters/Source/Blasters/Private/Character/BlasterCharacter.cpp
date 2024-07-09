@@ -19,6 +19,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "PlayerState/BlasterPlayerState.h"
 
 ABlasterCharacter::ABlasterCharacter()
 {
@@ -141,6 +142,8 @@ void ABlasterCharacter::Tick(float DeltaTime)
 		}
 	}
 	HideCameraIfCharacterClose();
+	//TODO：这段重置ui的需要修改
+	PollInit();
 }
 
 void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -302,6 +305,34 @@ void ABlasterCharacter::UpdateHUDHealth()
 	{
 		BlasterPlayerController->SetHUDHealth(Health, MaxHealth);
 	}
+}
+
+void ABlasterCharacter::PollInit()
+{
+	//BlasterPlayerState = BlasterPlayerState == nullptr ? GetPlayerState<ABlasterPlayerState>() : BlasterPlayerState;
+	//BlasterPlayerState->AddToScore(0.f);
+
+
+	if (BlasterPlayerState == nullptr)
+	{
+		BlasterPlayerState = GetPlayerState<ABlasterPlayerState>();
+		if (BlasterPlayerState)
+		{
+			BlasterPlayerState->AddToScore(0.f);
+		}
+	}
+}
+
+void ABlasterCharacter::AddScore()
+{
+	Multicast_AddScore();
+}
+
+void ABlasterCharacter::Multicast_AddScore_Implementation()
+{
+	BlasterPlayerState = BlasterPlayerState == nullptr ? GetPlayerState<ABlasterPlayerState>() : BlasterPlayerState;
+	BlasterPlayerState->AddToScore(1.f);
+
 }
 
 //死亡是在gamemode执行的 server端
