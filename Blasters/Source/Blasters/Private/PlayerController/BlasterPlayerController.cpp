@@ -48,4 +48,17 @@ void ABlasterPlayerController::SetHUDScore(float Score)
 	}
 }
 
+void ABlasterPlayerController::SetHUDDefeats(int32 Defeats)
+{
+
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+
+	bool bHUDValid = BlasterHUD && BlasterHUD->CharacterOverlay;
+
+	if (bHUDValid)
+	{
+		BlasterHUD->CharacterOverlay->SetDefeats(Defeats);
+	}
+}
+
 

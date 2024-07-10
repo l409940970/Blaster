@@ -20,3 +20,9 @@ void UCharacterOverlay::SetScore(float Score)
 	FString TextScore = FString::Printf(TEXT("%d"), FMath::FloorToInt(Score));
 	ScoreAmount->SetText(FText::FromString(TextScore));
 }
+
+void UCharacterOverlay::SetDefeats(int32 Defeats)
+{
+	FString TextDefeats = FString::Printf(TEXT("%d"), Defeats);
+	DefeateAmount->SetText(FText::FromString(TextDefeats));
+}

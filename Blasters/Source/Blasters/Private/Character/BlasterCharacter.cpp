@@ -359,6 +359,10 @@ void ABlasterCharacter::Multicast_Elim_Implementation()
 	bIsElimed = true;
 	PlayElimMontage();
 
+	//Ê§°Ü»ý·Ö
+	BlasterPlayerState = BlasterPlayerState == nullptr ? GetPlayerState<ABlasterPlayerState>() : BlasterPlayerState;
+	BlasterPlayerState->AddToDefeats(1.f);
+
 	//ÈÜ½â
 	if (DissolveMaterialInstance)
 	{

@@ -190,8 +190,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	class USoundCue* ElimBotSound;
 
-
-	UPROPERTY()
 	class ABlasterPlayerState* BlasterPlayerState;
 
 
@@ -207,8 +205,6 @@ public:
 	FORCEINLINE float GetAO_Yaw() const{ return AO_Yaw; }
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
 
-
-	UPROPERTY()
 	AWeapon* GetEquippedWeapon();
 
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }

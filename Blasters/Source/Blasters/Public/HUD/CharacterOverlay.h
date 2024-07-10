@@ -24,7 +24,10 @@ public:
 	class UTextBlock* HealthText;
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ScoreAmount;
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* DefeateAmount;
 
 	void SetHealth(float Health,float MaxHealth);
 	void SetScore(float Score);
+	void SetDefeats(int32 Defeats);
 };
