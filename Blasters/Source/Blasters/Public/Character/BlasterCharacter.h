@@ -208,7 +208,6 @@ public:
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
 
 
-	UPROPERTY()
 	AWeapon* GetEquippedWeapon();
 
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }

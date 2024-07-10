@@ -362,6 +362,11 @@ void ABlasterCharacter::Multicast_Elim_Implementation()
 	//失败积分
 	BlasterPlayerState = BlasterPlayerState == nullptr ? GetPlayerState<ABlasterPlayerState>() : BlasterPlayerState;
 	BlasterPlayerState->AddToDefeats(1.f);
+	//子弹数量归零
+	if (BlasterPlayerController)
+	{
+		BlasterPlayerController->SetHUDWeaponAmmo(0);
+	}
 
 	//溶解
 	if (DissolveMaterialInstance)

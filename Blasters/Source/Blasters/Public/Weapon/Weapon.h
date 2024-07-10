@@ -34,6 +34,7 @@ public:
 
 	//获取生命周期复制道具
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void OnRep_Owner() override;
 
 	virtual void Fire(const FVector& HitTarget);
 
@@ -56,6 +57,9 @@ public:
 	float FireDelay = 0.15f;
 	UPROPERTY(EditAnywhere, Category = Combat)
 	bool bAutomatic = true;
+
+	void SetHUDAmmo();
+
 
 protected:
 	virtual void BeginPlay() override;
@@ -106,6 +110,23 @@ private:
 	UPROPERTY(EditAnywhere)
 	//fov切换速度
 	float ZoomInterSpeed = 20.f;
+
+	//子弹数
+	UPROPERTY(EditAnywhere,ReplicatedUsing = OnRep_Ammo)
+	int32 Ammo;
+	//弹夹
+	UPROPERTY(EditAnywhere)
+	int32 MagCapacity;
+
+	UFUNCTION()
+	void OnRep_Ammo();
+	//子弹减少
+	void SpendRound();
+
+	UPROPERTY()
+	class ABlasterCharacter* BlasterOwnerCharacter;
+	UPROPERTY()
+	class ABlasterPlayerController* BlasterOwnerPlayerController;
 
 
 public:		

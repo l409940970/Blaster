@@ -61,4 +61,16 @@ void ABlasterPlayerController::SetHUDDefeats(int32 Defeats)
 	}
 }
 
+void ABlasterPlayerController::SetHUDWeaponAmmo(int32 Ammo)
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+
+	bool bHUDValid = BlasterHUD && BlasterHUD->CharacterOverlay;
+
+	if (bHUDValid)
+	{
+		BlasterHUD->CharacterOverlay->SetWeaponAmmo(Ammo);
+	}
+}
+
 

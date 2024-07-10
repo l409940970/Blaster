@@ -9,6 +9,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "Weapon/Casing.h"
+#include "PlayerController/BlasterPlayerController.h"
 
 
 
@@ -45,6 +46,22 @@ void AWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeP
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AWeapon, WeaponState);
+	DOREPLIFETIME(AWeapon, Ammo);
+		
+}
+
+void AWeapon::OnRep_Owner()
+{
+	Super::OnRep_Owner();
+	if (Owner == nullptr)
+	{
+		BlasterOwnerCharacter = nullptr;
+		BlasterOwnerPlayerController = nullptr;
+	}
+	else
+	{
+		SetHUDAmmo();
+	}
 
 }
 
@@ -122,6 +139,32 @@ void AWeapon::OnRep_WeaponState()
 	}
 }
 
+void AWeapon::OnRep_Ammo()
+{
+	SetHUDAmmo();
+
+}
+
+void AWeapon::SpendRound()
+{
+	--Ammo;
+	SetHUDAmmo();
+
+}
+
+void AWeapon::SetHUDAmmo()
+{
+	BlasterOwnerCharacter = BlasterOwnerCharacter == nullptr ? Cast<ABlasterCharacter>(GetOwner()) : BlasterOwnerCharacter;
+	if (BlasterOwnerCharacter)
+	{
+		BlasterOwnerPlayerController = BlasterOwnerPlayerController == nullptr ? Cast<ABlasterPlayerController>(BlasterOwnerCharacter->Controller) : BlasterOwnerPlayerController;
+		if (BlasterOwnerPlayerController)
+		{
+			BlasterOwnerPlayerController->SetHUDWeaponAmmo(Ammo);
+		}
+	}
+}
+
 void AWeapon::SetWeaponState(EWeaponState State)
 {
 	WeaponState = State;
@@ -162,6 +205,7 @@ void AWeapon::ShowPickupWidget(bool bShowWidget)
 
 }
 
+//Fire是在服务器中执行
 void AWeapon::Fire(const FVector& HitTarget)
 {
 	if (FireAnimation)
@@ -179,6 +223,7 @@ void AWeapon::Fire(const FVector& HitTarget)
 			GetWorld()->SpawnActor<ACasing>(CasingClass, SocketTransform.GetLocation(), SocketTransform.GetRotation().Rotator());
 		}
 	}
+	SpendRound();
 }
 
 void AWeapon::Dropped()
@@ -188,4 +233,6 @@ void AWeapon::Dropped()
 	FDetachmentTransformRules DetachRules(EDetachmentRule::KeepWorld, true);
 	WeaponMesh->DetachFromComponent(DetachRules);
 	SetOwner(nullptr);
+	BlasterOwnerCharacter = nullptr;
+	BlasterOwnerPlayerController = nullptr;
 }
