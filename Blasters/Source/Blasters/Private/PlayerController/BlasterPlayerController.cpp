@@ -15,6 +15,12 @@ void ABlasterPlayerController::BeginPlay()
 
 }
 
+bool ABlasterPlayerController::IsHUDVaild()
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	return BlasterHUD && BlasterHUD->CharacterOverlay;
+}
+
 
 void ABlasterPlayerController::OnPossess(APawn* InPawn)
 {
@@ -28,8 +34,8 @@ void ABlasterPlayerController::OnPossess(APawn* InPawn)
 }
 void ABlasterPlayerController::SetHUDHealth(float Health, float MaxHealth)
 {
-	bool bHUDValid = BlasterHUD && BlasterHUD->CharacterOverlay;
-	if (bHUDValid)
+
+	if (IsHUDVaild())
 	{
 		BlasterHUD->CharacterOverlay->SetHealth(Health, MaxHealth);
 	}
@@ -38,11 +44,8 @@ void ABlasterPlayerController::SetHUDHealth(float Health, float MaxHealth)
 
 void ABlasterPlayerController::SetHUDScore(float Score)
 {
-	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 
-	bool bHUDValid = BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->CharacterOverlay->ScoreAmount;
-
-	if (bHUDValid)
+	if (IsHUDVaild())
 	{
 		BlasterHUD->CharacterOverlay->SetScore(Score);
 	}
@@ -51,11 +54,7 @@ void ABlasterPlayerController::SetHUDScore(float Score)
 void ABlasterPlayerController::SetHUDDefeats(int32 Defeats)
 {
 
-	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
-
-	bool bHUDValid = BlasterHUD && BlasterHUD->CharacterOverlay;
-
-	if (bHUDValid)
+	if (IsHUDVaild())
 	{
 		BlasterHUD->CharacterOverlay->SetDefeats(Defeats);
 	}
@@ -63,13 +62,19 @@ void ABlasterPlayerController::SetHUDDefeats(int32 Defeats)
 
 void ABlasterPlayerController::SetHUDWeaponAmmo(int32 Ammo)
 {
-	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 
-	bool bHUDValid = BlasterHUD && BlasterHUD->CharacterOverlay;
-
-	if (bHUDValid)
+	if (IsHUDVaild())
 	{
 		BlasterHUD->CharacterOverlay->SetWeaponAmmo(Ammo);
+	}
+}
+
+void ABlasterPlayerController::SetHUDCarriedAmmo(int32 Ammo)
+{
+
+	if (IsHUDVaild())
+	{
+		BlasterHUD->CharacterOverlay->SetCarriedAmmo(Ammo);
 	}
 }
 

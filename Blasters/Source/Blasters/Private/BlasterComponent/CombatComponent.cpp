@@ -31,6 +31,8 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 
 	DOREPLIFETIME(UCombatComponent, EquippedWeapon);
 	DOREPLIFETIME(UCombatComponent, bAiming);
+	//只对owner复制
+	DOREPLIFETIME_CONDITION(UCombatComponent, CarriedAmmo, COND_OwnerOnly);
 
 }
 
@@ -42,6 +44,11 @@ void UCombatComponent::BeginPlay()
 		Character->GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 		DefaultFOV = Character->GetFollowCameraFOV();
 		CurFOV = DefaultFOV;
+		//在服务器中
+		if (Character->HasAuthority())
+		{
+			InitialzeCarriedAmmo();
+		}
 	}
 	
 }
@@ -160,6 +167,20 @@ bool UCombatComponent::CanFire()
 	return !EquippedWeapon->IsEmpty() && bCanFire;
 }
 
+void UCombatComponent::OnRep_CarriedAmmo()
+{
+	Controller = Controller == nullptr ? Cast<ABlasterPlayerController>(Character->Controller) : Controller;
+	if (Controller)
+	{
+		Controller->SetHUDCarriedAmmo(CarriedAmmo);
+	}
+}
+
+void UCombatComponent::InitialzeCarriedAmmo()
+{
+	CarriedAmmoMap.Emplace(EWeaponTyps::EWT_AssaultRifle, StartingARAmmo);
+}
+
 //这个函数是在服务器执行
 //如果是客户端拾取武器的话，那就是由客户端调用，服务器执行，所以下面的改变旋转只会在服务器生效，客户端是看不到效果的
 //因此需要OnRep_EquippedWeapon函数，同步给客户端
@@ -185,6 +206,17 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	}
 	EquippedWeapon->SetOwner(Character);
 	EquippedWeapon->SetHUDAmmo();
+	
+	//武器的备弹
+	if (CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
+	{
+		CarriedAmmo = CarriedAmmoMap[EquippedWeapon->GetWeaponType()];
+	}
+	Controller = Controller == nullptr ? Cast<ABlasterPlayerController>(Character->Controller) : Controller;
+	if (Controller)
+	{
+		Controller->SetHUDCarriedAmmo(CarriedAmmo);
+	}
 
 	//使用控制器的旋转
 	Character->GetCharacterMovement()->bOrientRotationToMovement = false;

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "BlasterTypes/WeaponTypes.h"
 #include "Weapon.generated.h"
 
 
@@ -128,6 +129,9 @@ private:
 	UPROPERTY()
 	class ABlasterPlayerController* BlasterOwnerPlayerController;
 
+	//ÎäÆ÷
+	UPROPERTY(EditAnywhere)
+	EWeaponTyps WeaponType;
 
 public:		
 
@@ -137,4 +141,5 @@ public:
 	FORCEINLINE float GetZoomedFOV() const{ return ZoomFOV; }
 	FORCEINLINE float GetZoomInterpSpeed() const { return ZoomInterSpeed; }
 	bool IsEmpty();
+	FORCEINLINE EWeaponTyps GetWeaponType() const { return WeaponType; }
 };

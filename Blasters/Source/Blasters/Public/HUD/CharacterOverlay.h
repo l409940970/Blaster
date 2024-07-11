@@ -28,9 +28,12 @@ public:
 	UTextBlock* DefeateAmount;
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* WeaponAmmoAmount;
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* CarriedAmmoAmount;
 
 	void SetHealth(float Health,float MaxHealth);
 	void SetScore(float Score);
 	void SetDefeats(int32 Defeats);
 	void SetWeaponAmmo(int32 Ammo);
+	void SetCarriedAmmo(int32 Ammo);
 };
