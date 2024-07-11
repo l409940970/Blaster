@@ -114,7 +114,7 @@ private:
 	//子弹数
 	UPROPERTY(EditAnywhere,ReplicatedUsing = OnRep_Ammo)
 	int32 Ammo;
-	//弹夹
+	//弹夹最大容量
 	UPROPERTY(EditAnywhere)
 	int32 MagCapacity;
 
@@ -136,5 +136,5 @@ public:
 	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
 	FORCEINLINE float GetZoomedFOV() const{ return ZoomFOV; }
 	FORCEINLINE float GetZoomInterpSpeed() const { return ZoomInterSpeed; }
-
+	bool IsEmpty();
 };

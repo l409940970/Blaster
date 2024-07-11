@@ -151,6 +151,15 @@ void UCombatComponent::FireTimerFinishied()
 	}
 }
 
+bool UCombatComponent::CanFire()
+{
+	if (EquippedWeapon == nullptr)
+	{
+		return false;
+	}
+	return !EquippedWeapon->IsEmpty() && bCanFire;
+}
+
 //这个函数是在服务器执行
 //如果是客户端拾取武器的话，那就是由客户端调用，服务器执行，所以下面的改变旋转只会在服务器生效，客户端是看不到效果的
 //因此需要OnRep_EquippedWeapon函数，同步给客户端
@@ -208,7 +217,7 @@ void UCombatComponent::FireButtonPressed(bool bPressed)
 void UCombatComponent::Fire()
 {
 
-	if (bCanFire)
+	if (CanFire())
 	{
 		bCanFire = false;
 		////开火前检测目标点

@@ -103,6 +103,8 @@ private:
 	void StartFireTimer();
 	void FireTimerFinishied();
 
+	bool CanFire();
+
 public:	
 	void EquipWeapon(AWeapon* WeaponToEquip);
 		
