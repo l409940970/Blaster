@@ -7,6 +7,7 @@
 #include "BlasterTypes/TurningInPlace.h"
 #include "Interfaces/InteractWithCrosshairInterface.h"
 #include "Components/TimelineComponent.h"
+#include "BlasterTypes/CombatState.h"
 #include "BlasterCharacter.generated.h"
 
 UCLASS()
@@ -97,7 +98,7 @@ private:
 
 
 	//战斗组件
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UCombatComponent* Combat;
 
 	//使用RPC,可靠传输
@@ -221,6 +222,7 @@ public:
 
 	float GetFollowCameraFOV() const;
 	void SetFollowCameraFOV(float FOV) const;
+	ECombatState GetCombatState() const;
 
 	FORCEINLINE bool ShouldRotateRootBone() const { return bRotateRootBone; }
 	FORCEINLINE bool IsElimmed() const { return bIsElimed; }

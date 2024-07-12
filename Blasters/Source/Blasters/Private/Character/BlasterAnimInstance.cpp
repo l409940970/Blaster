@@ -6,7 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Weapon/Weapon.h"
-
+#include "BlasterTypes/CombatState.h"
 
 void UBlasterAnimInstance::NativeInitializeAnimation()
 {
@@ -38,6 +38,7 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	TurningInPlace = BlasterChanracter->GetTurningInPlace();
 	bRotateRootBone = BlasterChanracter->ShouldRotateRootBone();
 	bIsElimmed = BlasterChanracter->IsElimmed();
+	bUseFABRIK = BlasterChanracter->GetCombatState() != ECombatState::ECS_Reloading;
 
 	//Rotator在底层已经实现了复制
 	//yawoffset 用于扫射  

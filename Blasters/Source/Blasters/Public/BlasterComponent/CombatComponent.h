@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "HUD/BlasterHUD.h"
 #include "BlasterTypes/WeaponTypes.h"
+#include "BlasterTypes/CombatState.h"
 #include "CombatComponent.generated.h"
 
 
@@ -42,12 +43,18 @@ protected:
 	void FireButtonPressed(bool bPressed);
 	void Fire();
 	void Reload();
+	//在动画蓝图中调用，通过蒙太奇消息
+	UFUNCTION(BlueprintCallable)
+	void FinishReloading();
 
 	//服务器上开火
 	UFUNCTION(Server,Reliable)
 	void Server_Fire(const FVector_NetQuantize& TraceHitTarget);
+
 	UFUNCTION(Server,Reliable)
 	void Server_Reload();
+	void HandReload();
+
 
 	//网络组播  要加_Implementation  在服务器和所有客户端都会执行
 	UFUNCTION(NetMulticast,Reliable)
@@ -118,6 +125,13 @@ private:
 	UPROPERTY(EditAnywhere)
 	int32 StartingARAmmo = 30;
 	void InitialzeCarriedAmmo();
+
+
+	//组件状态
+	UPROPERTY(ReplicatedUsing = OnRep_CombatState)
+	ECombatState CombatState = ECombatState::ECS_Unoccupied;
+	UFUNCTION()
+	void OnRep_CombatState();
 
 public:	
 	void EquipWeapon(AWeapon* WeaponToEquip);

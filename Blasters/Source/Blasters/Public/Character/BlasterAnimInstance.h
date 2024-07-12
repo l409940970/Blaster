@@ -21,10 +21,10 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaTime) override;
 
 private:
-	UPROPERTY(BlueprintReadOnly,Category = Character,meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(BlueprintReadOnly, Category = Character, meta = (AllowPrivateAccess = "true"))
 	class ABlasterCharacter* BlasterChanracter;
 
-	UPROPERTY(BlueprintReadOnly,Category = Movement,meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	float Speed;
 	//在空中
 	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
@@ -55,7 +55,7 @@ private:
 	float AO_Pitch;
 	//左手放到枪上的位置，用逆运动学处理左手位置
 	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
-	FTransform LeftHandTransform; 
+	FTransform LeftHandTransform;
 	//转向
 	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	ETurningInPlace TurningInPlace;
@@ -70,6 +70,9 @@ private:
 	//是否死亡
 	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	bool bIsElimmed;
+	//是否使用IK，播放换弹动画时不使用
+	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	bool bUseFABRIK;
 	// 
 	//
 	FRotator DeltaRotation;

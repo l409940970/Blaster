@@ -665,6 +665,15 @@ void ABlasterCharacter::SetFollowCameraFOV(float FOV) const
 	FollowCamera->SetFieldOfView(FOV);
 }
 
+ECombatState ABlasterCharacter::GetCombatState() const
+{
+	if (Combat == nullptr)
+	{
+		return ECombatState::ECS_MAX;
+	}
+	return Combat->CombatState;
+}
+
 //¿Í»§¶ËÖ´ÐÐ
 void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 {
@@ -713,6 +722,7 @@ void ABlasterCharacter::PlayReloadMontage()
 			}
 
 			AnimInstance->Montage_JumpToSection(SectionName);
+			
 		}
 	}
 }

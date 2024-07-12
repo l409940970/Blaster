@@ -296,9 +296,10 @@ void UCombatComponent::OnRep_CombatState()
 	switch (CombatState)
 	{
 	case ECombatState::ECS_Unoccupied:
+		HandReload();
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString::Printf(TEXT("is use IK: %d"), CombatState != ECombatState::ECS_Reloading));
 		break;
 	case ECombatState::ECS_Reloading:
-		HandReload();
 		break;
 	case ECombatState::ECS_MAX:
 		break;
