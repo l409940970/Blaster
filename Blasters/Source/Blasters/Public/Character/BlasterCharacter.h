@@ -26,7 +26,9 @@ public:
 	virtual void PostInitializeComponents() override;
 
 	void PlayFireMontage(bool bAiming);
+	void PlayReloadMontage();
 	void PlayElimMontage();
+
 
 	UFUNCTION(NetMulticast, Unreliable)
 	void Multicast_Hit();
@@ -56,6 +58,7 @@ protected:
 	void Turn(float Value);
 	void LookUp(float Value);
 	void EquipButtonPressed();
+	void ReloadButtonPressed();
 	void CrouchButtonPressed();
 	void AimButtonPressed();
 	void AimButtonReleased();
@@ -122,6 +125,8 @@ private:
 	//¿ª»ðÃÉÌ«Ææ
 	UPROPERTY(EditAnywhere,Category = "Combat")
 	class UAnimMontage* FireWeaponMontage;
+	UPROPERTY(EditAnywhere,Category = "Combat")
+	UAnimMontage* ReloadMontage;
 	//ÊÜ»÷ÃÉÌ«Ææ
 	UPROPERTY(EditAnywhere,Category = Combat)
 	UAnimMontage* HitReactMontage;

@@ -41,10 +41,13 @@ protected:
 	void OnRep_EquippedWeapon();
 	void FireButtonPressed(bool bPressed);
 	void Fire();
+	void Reload();
 
 	//服务器上开火
 	UFUNCTION(Server,Reliable)
 	void Server_Fire(const FVector_NetQuantize& TraceHitTarget);
+	UFUNCTION(Server,Reliable)
+	void Server_Reload();
 
 	//网络组播  要加_Implementation  在服务器和所有客户端都会执行
 	UFUNCTION(NetMulticast,Reliable)

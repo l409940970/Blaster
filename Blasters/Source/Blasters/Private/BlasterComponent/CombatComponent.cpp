@@ -230,6 +230,14 @@ void UCombatComponent::Server_Fire_Implementation(const FVector_NetQuantize& Tra
 	MulticastFire(TraceHitTarget);
 }
 
+void UCombatComponent::Server_Reload_Implementation()
+{
+	if (Character)
+	{
+		Character->PlayReloadMontage();
+	}
+}
+
 void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
 {
 	Character->PlayFireMontage(bAiming);
@@ -263,6 +271,14 @@ void UCombatComponent::Fire()
 		StartFireTimer();
 	}
 
+}
+
+void UCombatComponent::Reload()
+{
+	if (CarriedAmmo > 0)
+	{
+		Server_Reload();
+	}
 }
 
 void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
