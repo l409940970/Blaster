@@ -142,4 +142,6 @@ public:
 	FORCEINLINE float GetZoomInterpSpeed() const { return ZoomInterSpeed; }
 	bool IsEmpty();
 	FORCEINLINE EWeaponTyps GetWeaponType() const { return WeaponType; }
+	FORCEINLINE int32 GetAmmo() const { return Ammo; }
+	FORCEINLINE int32 GetMagCapacity() const { return MagCapacity; }
 };

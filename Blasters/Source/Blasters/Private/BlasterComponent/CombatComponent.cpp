@@ -280,11 +280,20 @@ void UCombatComponent::Reload()
 
 void UCombatComponent::Server_Reload_Implementation()
 {
-	if (Character)
+	if (Character == nullptr || EquippedWeapon == nullptr)
 	{
-		CombatState = ECombatState::ECS_Reloading;
-		HandReload();
+		return;
 	}
+	//更新武器备弹数
+	int32 ReloadAmount = AmmoutToReload();
+	if (CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
+	{
+		CarriedAmmoMap[EquippedWeapon->GetWeaponType()] -= ReloadAmount;
+		CarriedAmmo = CarriedAmmoMap[EquippedWeapon->GetWeaponType()];
+	}
+
+	CombatState = ECombatState::ECS_Reloading;
+	HandReload();
 }
 
 void UCombatComponent::FinishReloading()
@@ -326,6 +335,26 @@ void UCombatComponent::OnRep_CombatState()
 void UCombatComponent::HandReload()
 {
 	Character->PlayReloadMontage();
+}
+
+int32 UCombatComponent::AmmoutToReload()
+{
+	if (EquippedWeapon == nullptr)
+	{
+		return 0;
+	}
+	// 需要添加的子弹数
+	int32 RoomInMag = EquippedWeapon->GetMagCapacity() - EquippedWeapon->GetAmmo();
+
+	if (CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
+	{
+		//当前武器拥有的备弹数
+		int32 AmountCarried = CarriedAmmoMap[EquippedWeapon->GetWeaponType()];
+		int32 Least = FMath::Min(RoomInMag, AmountCarried);
+
+		return FMath::Clamp(RoomInMag, 0, Least);
+	}
+	return 0;
 }
 
 void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)

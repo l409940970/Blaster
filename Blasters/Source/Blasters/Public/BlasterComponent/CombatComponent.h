@@ -46,14 +46,17 @@ protected:
 	//在动画蓝图中调用，通过蒙太奇消息
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();
+	UFUNCTION(Server, Reliable)
+	void Server_Reload();
+	void HandReload();
+	int32 AmmoutToReload();
+
 
 	//服务器上开火
 	UFUNCTION(Server,Reliable)
 	void Server_Fire(const FVector_NetQuantize& TraceHitTarget);
 
-	UFUNCTION(Server,Reliable)
-	void Server_Reload();
-	void HandReload();
+
 
 
 	//网络组播  要加_Implementation  在服务器和所有客户端都会执行
