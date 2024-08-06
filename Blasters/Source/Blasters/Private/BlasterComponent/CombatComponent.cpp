@@ -284,6 +284,19 @@ void UCombatComponent::Server_Reload_Implementation()
 	{
 		return;
 	}
+
+	CombatState = ECombatState::ECS_Reloading;
+	HandReload();
+}
+
+void UCombatComponent::UpdataAmmoValues()
+{
+
+	if (Character == nullptr || EquippedWeapon == nullptr)
+	{
+		return;
+	}
+
 	//更新武器备弹数
 	int32 ReloadAmount = AmmoutToReload();
 	if (CarriedAmmoMap.Contains(EquippedWeapon->GetWeaponType()))
@@ -291,9 +304,14 @@ void UCombatComponent::Server_Reload_Implementation()
 		CarriedAmmoMap[EquippedWeapon->GetWeaponType()] -= ReloadAmount;
 		CarriedAmmo = CarriedAmmoMap[EquippedWeapon->GetWeaponType()];
 	}
+	EquippedWeapon->AddAmmo(-ReloadAmount);
 
-	CombatState = ECombatState::ECS_Reloading;
-	HandReload();
+
+	Controller = Controller == nullptr ? Cast<ABlasterPlayerController>(Character->Controller) : Controller;
+	if (Controller)
+	{
+		Controller->SetHUDCarriedAmmo(CarriedAmmo);
+	}
 }
 
 void UCombatComponent::FinishReloading()
@@ -305,6 +323,7 @@ void UCombatComponent::FinishReloading()
 	if ( Character->HasAuthority())
 	{
 		CombatState = ECombatState::ECS_Unoccupied;
+		UpdataAmmoValues();
 	}
 	if (bFireButtonPressed)
 	{

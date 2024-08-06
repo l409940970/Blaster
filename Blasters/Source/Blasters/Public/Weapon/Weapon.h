@@ -40,6 +40,8 @@ public:
 	virtual void Fire(const FVector& HitTarget);
 
 	void Dropped();
+	//添加子弹
+	void AddAmmo(int32 AmmoToAdd);
 
 	//十字准星ui
 	UPROPERTY(EditAnywhere, Category = Crosshairs)

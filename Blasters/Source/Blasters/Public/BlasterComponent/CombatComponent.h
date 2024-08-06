@@ -139,4 +139,6 @@ private:
 public:	
 	void EquipWeapon(AWeapon* WeaponToEquip);
 		
+	void UpdataAmmoValues();
+
 };
