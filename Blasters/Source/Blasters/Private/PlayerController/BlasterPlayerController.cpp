@@ -15,13 +15,6 @@ void ABlasterPlayerController::BeginPlay()
 
 }
 
-bool ABlasterPlayerController::IsHUDVaild()
-{
-	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
-	return BlasterHUD && BlasterHUD->CharacterOverlay;
-}
-
-
 void ABlasterPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
@@ -32,6 +25,83 @@ void ABlasterPlayerController::OnPossess(APawn* InPawn)
 		SetHUDHealth(BlasterCharacter->GetHealth(), BlasterCharacter->GetMaxHealth());
 	}
 }
+
+void ABlasterPlayerController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	CheckTimeSync(DeltaTime);
+	SetHUDTime();
+}
+
+float ABlasterPlayerController::GetServerTime()
+{
+	if (HasAuthority())
+	{
+		return GetWorld()->GetTimeSeconds();
+	}
+	else
+	{
+		return GetWorld()->GetTimeSeconds() + ClientServerDelta;
+
+	}
+
+}
+
+void ABlasterPlayerController::ReceivedPlayer()
+{
+	Super::ReceivedPlayer();
+	if (IsLocalController())
+	{
+		Server_RequestServerTime(GetWorld()->GetTimeSeconds());
+	}
+}
+void ABlasterPlayerController::SetHUDTime()
+{
+	uint32 SecondsLeft = FMath::CeilToInt(MatchTime - GetServerTime());
+	if (CountdownInt != SecondsLeft)
+	{
+		SetHUDMatchCountdown(MatchTime - GetServerTime());
+	}
+	CountdownInt = SecondsLeft;
+}
+
+void ABlasterPlayerController::Server_RequestServerTime_Implementation(float TimeOfClientRequest)
+{
+	//当前server的时间
+	float ServerTimeOfReceipt = GetWorld()->GetTimeSeconds();
+	Client_ReportServerTime(TimeOfClientRequest, ServerTimeOfReceipt);
+}
+
+void ABlasterPlayerController::Client_ReportServerTime_Implementation(float TimeOfClientRequest, float TimeServerReceivedClientRequest)
+{
+	//client 与server 之间通信的时间
+	float RoundTripTime = GetWorld()->GetTimeSeconds() - TimeOfClientRequest;
+	//server的时间为当前加上通信时间
+	float CurrentServerTime = TimeServerReceivedClientRequest + (0.5f * RoundTripTime);
+	ClientServerDelta = CurrentServerTime - GetWorld()->GetTimeSeconds();
+
+}
+
+bool ABlasterPlayerController::IsHUDVaild()
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+	return BlasterHUD && BlasterHUD->CharacterOverlay;
+}
+
+void ABlasterPlayerController::CheckTimeSync(float DeltaTime)
+{
+	TimeSyncRunningTime += DeltaTime;
+	if (IsLocalController() && TimeSyncRunningTime > TimeSyncFrequency)
+	{
+		Server_RequestServerTime(GetWorld()->GetTimeSeconds());
+		TimeSyncRunningTime = 0;
+	}
+}
+
+
+
+
 void ABlasterPlayerController::SetHUDHealth(float Health, float MaxHealth)
 {
 
@@ -75,6 +145,14 @@ void ABlasterPlayerController::SetHUDCarriedAmmo(int32 Ammo)
 	if (IsHUDVaild())
 	{
 		BlasterHUD->CharacterOverlay->SetCarriedAmmo(Ammo);
+	}
+}
+
+void ABlasterPlayerController::SetHUDMatchCountdown(float CountdownTime)
+{
+	if (IsHUDVaild())
+	{
+		BlasterHUD->CharacterOverlay->SetMatchCountdown(CountdownTime);
 	}
 }
 
