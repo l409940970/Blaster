@@ -39,10 +39,6 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	bRotateRootBone = BlasterChanracter->ShouldRotateRootBone();
 	bIsElimmed = BlasterChanracter->IsElimmed();
 	bUseFABRIK = BlasterChanracter->GetCombatState() != ECombatState::ECS_Reloading;
-	bUseFABRIK = BlasterChanracter->GetCombatState() != ECombatState::ECS_Reloading;
-	bTransformRightHadn = BlasterChanracter->GetCombatState() != ECombatState::ECS_Reloading;
-
-
 
 	//Rotator在底层已经实现了复制
 	//yawoffset 用于扫射  

@@ -13,6 +13,7 @@
 #include "PlayerController/BlasterPlayerController.h"
 #include "Interfaces/InteractWithCrosshairInterface.h"
 #include "TimerManager.h"
+#include "Sound/SoundCue.h"
 
 
 UCombatComponent::UCombatComponent()
@@ -91,6 +92,11 @@ void UCombatComponent::OnRep_EquippedWeapon()
 		if (HandSocket)
 		{
 			HandSocket->AttachActor(EquippedWeapon, Character->GetMesh());
+		}
+
+		if (EquippedWeapon->EquipSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, EquippedWeapon->EquipSound, Character->GetActorLocation());
 		}
 
 		//使用控制器的旋转
@@ -217,6 +223,11 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 	if (Controller)
 	{
 		Controller->SetHUDCarriedAmmo(CarriedAmmo);
+	}
+
+	if (EquippedWeapon->EquipSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, EquippedWeapon->EquipSound, Character->GetActorLocation());
 	}
 
 	//使用控制器的旋转

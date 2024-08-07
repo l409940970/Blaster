@@ -61,6 +61,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = Combat)
 	bool bAutomatic = true;
 
+	// ∞»°“Ù–ß
+	UPROPERTY(EditAnywhere)
+	class USoundCue* EquipSound;
+
 	void SetHUDAmmo();
 
 
@@ -134,6 +138,8 @@ private:
 	//Œ‰∆˜
 	UPROPERTY(EditAnywhere)
 	EWeaponTyps WeaponType;
+
+
 
 public:		
 

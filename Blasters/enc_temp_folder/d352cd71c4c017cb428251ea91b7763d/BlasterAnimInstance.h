@@ -73,14 +73,6 @@ private:
 	//是否使用IK，播放换弹动画时不使用
 	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	bool bUseFABRIK;
-	//是否使用瞄准偏移，换弹时不使用
-	UPROPERTY(BlueprintReadOnly,Category = Movement,meta = (AllowPrivateAccess = "true"))
-	bool bUseAimOffsets;
-	//是否旋转右手，换弹时不使用
-	UPROPERTY(BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
-	bool bTransformRightHadn;
-
-
 	// 
 	//
 	FRotator DeltaRotation;
