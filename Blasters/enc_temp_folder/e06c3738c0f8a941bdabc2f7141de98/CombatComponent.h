@@ -125,10 +125,8 @@ private:
 	UFUNCTION()
 	void OnRep_CarriedAmmo();
 	TMap<EWeaponTyps, int32> CarriedAmmoMap;
-	//每种类型的武器，角色初始所携带的子弹数
 	UPROPERTY(EditAnywhere)
 	int32 StartingARAmmo = 30;
-
 	void InitialzeCarriedAmmo();
 
 

@@ -118,7 +118,7 @@ private:
 	//fov切换速度
 	float ZoomInterSpeed = 20.f;
 
-	//武器当前的子弹数
+	//子弹数
 	UPROPERTY(EditAnywhere,ReplicatedUsing = OnRep_Ammo)
 	int32 Ammo;
 	//弹夹最大容量
