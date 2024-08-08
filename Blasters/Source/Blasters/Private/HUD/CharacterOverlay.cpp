@@ -47,3 +47,4 @@ void UCharacterOverlay::SetMatchCountdown(float CountdownTime)
 	FString CountdownText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
 	MatchCountdownText->SetText(FText::FromString(CountdownText));
 }
+

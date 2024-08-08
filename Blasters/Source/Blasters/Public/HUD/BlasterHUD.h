@@ -33,22 +33,30 @@ class BLASTERS_API ABlasterHUD : public AHUD
 public:
 	virtual void DrawHUD() override;
 
-	UPROPERTY(EditAnywhere,Category = "Player Status")
-	TSubclassOf<class UUserWidget> CharacterOverlayClass;
-	class UCharacterOverlay* CharacterOverlay;
-
 protected:
 	virtual void BeginPlay() override;
 
+public:
+	void SetHUDPackage(const FHUDPackage& Package,float Spread);
 	void AddCharacterOverlay();
-private:
-	FHUDPackage HUDPackage;
 
+
+protected:
+
+
+private:
 	void DrawCrosshair(UTexture2D* Texture, FVector2D ViewportCenter,FVector2D Spread, FLinearColor CrosshairColor);
 
+
+public:
+	UPROPERTY(EditAnywhere, Category = "Player Status")
+	TSubclassOf<class UUserWidget> CharacterOverlayClass;
+	class UCharacterOverlay* CharacterOverlay;
+
+private:
+	FHUDPackage HUDPackage;
 	UPROPERTY(EditAnywhere)
 	float CrosshaitSpreadMax = 16.f;
 
-public:
-	void SetHUDPackage(const FHUDPackage& Package,float Spread);
+
 };

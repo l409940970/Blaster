@@ -14,6 +14,14 @@ class BLASTERS_API UCharacterOverlay : public UUserWidget
 {
 	GENERATED_BODY()
 	
+public:
+	void SetHealth(float Health, float MaxHealth);
+	void SetScore(float Score);
+	void SetDefeats(int32 Defeats);
+	void SetWeaponAmmo(int32 Ammo);
+	void SetCarriedAmmo(int32 Ammo);
+	void SetMatchCountdown(float CountdownTime);
+
 
 public:
 
@@ -34,10 +42,4 @@ public:
 	UTextBlock* MatchCountdownText;
 
 
-	void SetHealth(float Health,float MaxHealth);
-	void SetScore(float Score);
-	void SetDefeats(int32 Defeats);
-	void SetWeaponAmmo(int32 Ammo);
-	void SetCarriedAmmo(int32 Ammo);
-	void SetMatchCountdown(float CountdownTime);
 };
