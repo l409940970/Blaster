@@ -15,9 +15,24 @@ class BLASTERS_API ABlasterGameMode : public AGameMode
 	GENERATED_BODY()
 	
 public:
+	ABlasterGameMode();
+	virtual void Tick(float DeltaTime) override;
 
+protected:
+	virtual void BeginPlay() override;
+public:
 	//ÕÊº“Ã‘Ã≠
 	virtual void PlayerEliminated(class ABlasterCharacter* ElimmedCharacter, class ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
 	//÷ÿ…˙
 	virtual void RequestRespawn(ACharacter* ElimCharacter, AController* ElimmedController);
+
+public:
+	UPROPERTY(EditDefaultsOnly)
+	float WarmupTime = 10.f;
+
+	float LevelStartingTime = 0.f;
+
+private:
+	float CountdownTime = 0.f;
+
 };
