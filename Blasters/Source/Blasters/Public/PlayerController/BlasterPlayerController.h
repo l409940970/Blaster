@@ -34,8 +34,9 @@ public:
 	void SetHUDMatchCountdown(float CountdownTime);
 	virtual float GetServerTime();
 	void OnMatchStateSet(FName State);
-
 	void PollInit();
+
+
 protected:
 
 	void SetHUDTime();
@@ -43,7 +44,7 @@ protected:
 	void Server_RequestServerTime(float TimeOfClientRequest);
 	UFUNCTION(Client,Reliable)
 	void Client_ReportServerTime(float TimeOfClientRequest,float TimeServerReceivedClientRequest);
-
+	void HandleMatchHasStarted();
 
 
 

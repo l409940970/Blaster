@@ -38,8 +38,9 @@ protected:
 
 public:
 	void SetHUDPackage(const FHUDPackage& Package,float Spread);
-	void AddCharacterOverlay();
 
+	void AddCharacterOverlay();
+	void AddAnnouncement();
 
 protected:
 
@@ -51,10 +52,15 @@ private:
 public:
 	UPROPERTY(EditAnywhere, Category = "Player Status")
 	TSubclassOf<class UUserWidget> CharacterOverlayClass;
+	UPROPERTY(EditAnywhere, Category = "Player Status")
+	TSubclassOf<UUserWidget> AnnouncementClass;
+
 	class UCharacterOverlay* CharacterOverlay;
+	class UAnnouncement* Announcement;
 
 private:
 	FHUDPackage HUDPackage;
+
 	UPROPERTY(EditAnywhere)
 	float CrosshaitSpreadMax = 16.f;
 
