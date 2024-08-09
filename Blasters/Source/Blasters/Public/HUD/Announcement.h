@@ -14,6 +14,9 @@ class BLASTERS_API UAnnouncement : public UUserWidget
 {
 	GENERATED_BODY()
 
+public:
+	void SetAnnouncementCountdown(float CountdownTime);
+
 
 public:
 	UPROPERTY(meta = (BindWidget))

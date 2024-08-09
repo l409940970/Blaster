@@ -28,8 +28,12 @@ public:
 	virtual void RequestRespawn(ACharacter* ElimCharacter, AController* ElimmedController);
 
 public:
+	//开始游戏倒计时
 	UPROPERTY(EditDefaultsOnly)
 	float WarmupTime = 10.f;
+	//游戏时长
+	UPROPERTY(EditDefaultsOnly)
+	float MatchTime = 120.f;
 
 	float LevelStartingTime = 0.f;
 

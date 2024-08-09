@@ -32,6 +32,8 @@ public:
 	void SetHUDWeaponAmmo(int32 Ammo);
 	void SetHUDCarriedAmmo(int32 Ammo);
 	void SetHUDMatchCountdown(float CountdownTime);
+	//倒计时
+	void SetHUDAnnouncementCountdown(float CountdownTime);
 	virtual float GetServerTime();
 	void OnMatchStateSet(FName State);
 	void PollInit();
@@ -39,46 +41,55 @@ public:
 
 protected:
 
-	void SetHUDTime();
 	UFUNCTION(Server,Reliable)
 	void Server_RequestServerTime(float TimeOfClientRequest);
 	UFUNCTION(Client,Reliable)
 	void Client_ReportServerTime(float TimeOfClientRequest,float TimeServerReceivedClientRequest);
+	UFUNCTION(Server,Reliable)
+	void Server_CheckMatchState();
+	//玩家中途加入game
+	UFUNCTION(Client,Reliable)
+	void Client_JoinMidgame(FName StateOfMatch,float Warmup,float Match,float StartingTime);
+
+	//设置游戏时间
+	void SetHUDTime();
+	//游戏状态开始
 	void HandleMatchHasStarted();
 
-
-
 private:
+	UFUNCTION()
+	void OnRep_MatchState();
+
 	bool IsHUDVaild();
 	void CheckTimeSync(float DeltaTime);
 
-	UFUNCTION()
-	void OnRep_MatchState();
+
 
 protected:
 	UPROPERTY()
 	class ABlasterHUD* BlasterHUD;
-	//客户端到服务器的延迟时间
-	float ClientServerDelta = 0.f;
-	//
+	//client和server多久同步一次时间
 	UPROPERTY(EditAnywhere,Category = Time)
 	float TimeSyncFrequency = 5.f;
+
+	//客户端到服务器的延迟时间
+	float ClientServerDelta = 0.f;
 	float TimeSyncRunningTime = 0.f;
 
 private:
-	//比赛时间
-	float MatchTime = 120.f;
-	uint32 CountdownInt = 0;
 
 	//游戏状态
 	UPROPERTY(ReplicatedUsing = OnRep_MatchState)
 	FName MatchState;
-
 	UPROPERTY()
 	class UCharacterOverlay* CharacterOverlay;
 
+	//比赛时间
+	float MatchTime = 0.f;
+	float WarmupTime = 0.f;
+	float LevelStartingTime = 0.f;
+	uint32 CountdownInt = 0;
 	bool bInitializeCharacterOverlay = false;
-
 	float HUDHealth;
 	float HUDMaxHealth;
 	float HUDScore;

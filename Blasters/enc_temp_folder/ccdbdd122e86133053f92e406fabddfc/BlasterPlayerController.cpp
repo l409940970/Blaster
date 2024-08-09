@@ -132,10 +132,10 @@ void ABlasterPlayerController::Server_CheckMatchState_Implementation()
 
 		Client_JoinMidgame(MatchState, WarmupTime, MatchTime, LevelStartingTime);
 
-		//if (BlasterHUD && MatchState == MatchState::WaitingToStart)
-		//{
-		//	BlasterHUD->AddAnnouncement();
-		//}
+		if (BlasterHUD && MatchState == MatchState::WaitingToStart)
+		{
+			BlasterHUD->AddAnnouncement();
+		}
 	}
 }
 
