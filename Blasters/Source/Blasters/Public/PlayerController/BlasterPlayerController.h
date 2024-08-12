@@ -55,6 +55,8 @@ protected:
 	void SetHUDTime();
 	//游戏状态开始
 	void HandleMatchHasStarted();
+	//游戏冷却期
+	void HandleCooldown();
 
 private:
 	UFUNCTION()
