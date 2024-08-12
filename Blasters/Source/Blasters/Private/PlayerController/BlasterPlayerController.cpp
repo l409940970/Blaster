@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "PlayerController/BlasterPlayerController.h"
@@ -29,7 +29,7 @@ void ABlasterPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 void ABlasterPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	
+
 	ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(InPawn);
 	if (BlasterCharacter)
 	{
@@ -81,16 +81,29 @@ void ABlasterPlayerController::SetHUDTime()
 	{
 		TimeLeft = WarmupTime - GetServerTime() + LevelStartingTime;
 	}
-	else if(MatchState == MatchState::InProgress)
+	else if (MatchState == MatchState::InProgress)
 	{
 		TimeLeft = WarmupTime + MatchTime - GetServerTime() + LevelStartingTime;
 	}
-
+	else if (MatchState == MatchState::Cooldown)
+	{
+		TimeLeft = CooldownTime + WarmupTime + MatchTime - GetServerTime() + LevelStartingTime;
+	}
 
 	uint32 SecondsLeft = FMath::CeilToInt(TimeLeft);
+
+	if (HasAuthority())
+	{
+		BlasterGameMode = BlasterGameMode == nullptr ? Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this)) : BlasterGameMode;
+		if (BlasterGameMode)
+		{
+			SecondsLeft = FMath::CeilToInt(BlasterGameMode->GetCountdownTime() + LevelStartingTime);
+		}
+	}
+
 	if (CountdownInt != SecondsLeft)
 	{
-		if (MatchState == MatchState::WaitingToStart)
+		if (MatchState == MatchState::WaitingToStart || MatchState == MatchState::Cooldown)
 		{
 			SetHUDAnnouncementCountdown(TimeLeft);
 		}
@@ -105,16 +118,16 @@ void ABlasterPlayerController::SetHUDTime()
 
 void ABlasterPlayerController::Server_RequestServerTime_Implementation(float TimeOfClientRequest)
 {
-	//µ±Ç°serverµÄÊ±¼ä
+	//å½“å‰serverçš„æ—¶é—´
 	float ServerTimeOfReceipt = GetWorld()->GetTimeSeconds();
 	Client_ReportServerTime(TimeOfClientRequest, ServerTimeOfReceipt);
 }
 
 void ABlasterPlayerController::Client_ReportServerTime_Implementation(float TimeOfClientRequest, float TimeServerReceivedClientRequest)
 {
-	//client Óëserver Ö®¼äÍ¨ÐÅµÄÊ±¼ä
+	//client ä¸Žserver ä¹‹é—´é€šä¿¡çš„æ—¶é—´
 	float RoundTripTime = GetWorld()->GetTimeSeconds() - TimeOfClientRequest;
-	//serverµÄÊ±¼äÎªµ±Ç°¼ÓÉÏÍ¨ÐÅÊ±¼ä
+	//serverçš„æ—¶é—´ä¸ºå½“å‰åŠ ä¸Šé€šä¿¡æ—¶é—´
 	float CurrentServerTime = TimeServerReceivedClientRequest + (0.5f * RoundTripTime);
 	ClientServerDelta = CurrentServerTime - GetWorld()->GetTimeSeconds();
 
@@ -128,9 +141,10 @@ void ABlasterPlayerController::Server_CheckMatchState_Implementation()
 		WarmupTime = GameMode->WarmupTime;
 		MatchTime = GameMode->MatchTime;
 		LevelStartingTime = GameMode->LevelStartingTime;
+		CooldownTime = GameMode->CooldownTime;
 		MatchState = GameMode->GetMatchState();
 
-		Client_JoinMidgame(MatchState, WarmupTime, MatchTime, LevelStartingTime);
+		Client_JoinMidgame(MatchState, WarmupTime, MatchTime, LevelStartingTime, CooldownTime);
 
 		//if (BlasterHUD && MatchState == MatchState::WaitingToStart)
 		//{
@@ -139,11 +153,12 @@ void ABlasterPlayerController::Server_CheckMatchState_Implementation()
 	}
 }
 
-void ABlasterPlayerController::Client_JoinMidgame_Implementation(FName StateOfMatch, float Warmup, float Match, float StartingTime)
+void ABlasterPlayerController::Client_JoinMidgame_Implementation(FName StateOfMatch, float Warmup, float Match, float StartingTime, float CoolTime)
 {
 	WarmupTime = Warmup;
 	MatchTime = Match;
 	LevelStartingTime = StartingTime;
+	CooldownTime = CoolTime;
 	MatchState = StateOfMatch;
 	OnMatchStateSet(MatchState);
 
@@ -231,6 +246,7 @@ void ABlasterPlayerController::HandleCooldown()
 		if (BlasterHUD->Announcement)
 		{
 			BlasterHUD->Announcement->SetVisibility(ESlateVisibility::Visible);
+			BlasterHUD->Announcement->FinishiedGame();
 		}
 	}
 }
@@ -248,7 +264,7 @@ void ABlasterPlayerController::SetHUDHealth(float Health, float MaxHealth)
 		HUDHealth = Health;
 		HUDMaxHealth = MaxHealth;
 	}
-	
+
 }
 
 void ABlasterPlayerController::SetHUDScore(float Score)

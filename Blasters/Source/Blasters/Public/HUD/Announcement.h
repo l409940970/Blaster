@@ -7,7 +7,7 @@
 #include "Announcement.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class BLASTERS_API UAnnouncement : public UUserWidget
@@ -16,7 +16,7 @@ class BLASTERS_API UAnnouncement : public UUserWidget
 
 public:
 	void SetAnnouncementCountdown(float CountdownTime);
-
+	void FinishiedGame();
 
 public:
 	UPROPERTY(meta = (BindWidget))

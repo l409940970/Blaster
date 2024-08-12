@@ -6,10 +6,10 @@
 #include "GameFramework/GameMode.h"
 #include "BlasterGameMode.generated.h"
 
-//Ìí¼ÓÓÎÏ·×´Ì¬
+//æ·»åŠ æ¸¸æˆçŠ¶æ€
 namespace MatchState
 {
-	//ÓÎÏ·½áÊøºóµÄÀäÈ´ÆÚ
+	//æ¸¸æˆç»“æŸåçš„å†·å´æœŸ
 	extern BLASTERS_API const FName Cooldown;
 }
 
@@ -29,24 +29,27 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void OnMatchStateSet() override;
-public:
-	//Íæ¼ÒÌÔÌ­
-	virtual void PlayerEliminated(class ABlasterCharacter* ElimmedCharacter, class ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
-	//ÖØÉú
-	virtual void RequestRespawn(ACharacter* ElimCharacter, AController* ElimmedController);
+
 
 public:
-	//¿ªÊ¼ÓÎÏ·µ¹¼ÆÊ±
+	//ç©å®¶æ·˜æ±°
+	virtual void PlayerEliminated(class ABlasterCharacter* ElimmedCharacter, class ABlasterPlayerController* VictimController, ABlasterPlayerController* AttackerController);
+	//é‡ç”Ÿ
+	virtual void RequestRespawn(ACharacter* ElimCharacter, AController* ElimmedController);
+	FORCEINLINE float GetCountdownTime() const { return CountdownTime; }
+
+public:
+	//å¼€å§‹æ¸¸æˆå€’è®¡æ—¶
 	UPROPERTY(EditDefaultsOnly)
 	float WarmupTime = 10.f;
-	//ÓÎÏ·Ê±³¤
+	//æ¸¸æˆæ—¶é•¿
 	UPROPERTY(EditDefaultsOnly)
 	float MatchTime = 120.f;
-	//ÓÎÏ·½áÊøÀäÈ´Ê±¼ä
+	//æ¸¸æˆç»“æŸå†·å´æ—¶é—´
 	UPROPERTY(EditDefaultsOnly)
 	float CooldownTime = 10.f;
 
-	//½øÈë¹Ø¿¨µÄÊ±¼ä
+	//è¿›å…¥å…³å¡çš„æ—¶é—´
 	float LevelStartingTime = 0.f;
 
 private:

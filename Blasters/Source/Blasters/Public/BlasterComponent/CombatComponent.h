@@ -14,133 +14,133 @@
 
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BLASTERS_API UCombatComponent : public UActorComponent
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:	
-	UCombatComponent();
-	friend class ABlasterCharacter;
+public:
+    UCombatComponent();
+    friend class ABlasterCharacter;
 
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
-	//»ñÈ¡ÉúÃüÖÜÆÚ¸´ÖÆµÀ¾ß£¬ÉèÖÃĞèÒªÊôĞÔÍ¬²½µÄ±äÁ¿
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
+    virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+    //è·å–ç”Ÿå‘½å‘¨æœŸå¤åˆ¶é“å…·ï¼Œè®¾ç½®éœ€è¦å±æ€§åŒæ­¥çš„å˜é‡
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
 
 
 protected:
-	virtual void BeginPlay() override;
+    virtual void BeginPlay() override;
 
-	void SetAiming(bool isAim);
+    void SetAiming(bool isAim);
 
-	//Ê¹ÓÃRPC£¨serverµ÷ÓÃ£©
-	UFUNCTION(Server,Reliable)
-	void Server_SetAiming(bool isAim);
-	
-	UFUNCTION()
-	void OnRep_EquippedWeapon();
-	void FireButtonPressed(bool bPressed);
-	void Fire();
-	void Reload();
-	//ÔÚ¶¯»­À¶Í¼ÖĞµ÷ÓÃ£¬Í¨¹ıÃÉÌ«ÆæÏûÏ¢
-	UFUNCTION(BlueprintCallable)
-	void FinishReloading();
-	UFUNCTION(Server, Reliable)
-	void Server_Reload();
-	void HandReload();
-	int32 AmmoutToReload();
+    //ä½¿ç”¨RPCï¼ˆserverè°ƒç”¨ï¼‰
+    UFUNCTION(Server, Reliable)
+    void Server_SetAiming(bool isAim);
 
-
-	//·şÎñÆ÷ÉÏ¿ª»ğ
-	UFUNCTION(Server,Reliable)
-	void Server_Fire(const FVector_NetQuantize& TraceHitTarget);
+    UFUNCTION()
+    void OnRep_EquippedWeapon();
+    void FireButtonPressed(bool bPressed);
+    void Fire();
+    void Reload();
+    //åœ¨åŠ¨ç”»è“å›¾ä¸­è°ƒç”¨ï¼Œé€šè¿‡è’™å¤ªå¥‡æ¶ˆæ¯
+    UFUNCTION(BlueprintCallable)
+    void FinishReloading();
+    UFUNCTION(Server, Reliable)
+    void Server_Reload();
+    void HandReload();
+    int32 AmmoutToReload();
 
 
+    //æœåŠ¡å™¨ä¸Šå¼€ç«
+    UFUNCTION(Server, Reliable)
+    void Server_Fire(const FVector_NetQuantize& TraceHitTarget);
 
 
-	//ÍøÂç×é²¥  Òª¼Ó_Implementation  ÔÚ·şÎñÆ÷ºÍËùÓĞ¿Í»§¶Ë¶¼»áÖ´ĞĞ
-	UFUNCTION(NetMulticast,Reliable)
-	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
 
-	//ÒÔÆÁÄ»ÖĞĞÄ×÷Îª×¼ĞÇ
-	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
-	//»æÖÆ×¼ĞÇ
-	void SetHUDCrosshairs(float DeltaTime);
+    //ç½‘ç»œç»„æ’­  è¦åŠ _Implementation  åœ¨æœåŠ¡å™¨å’Œæ‰€æœ‰å®¢æˆ·ç«¯éƒ½ä¼šæ‰§è¡Œ
+    UFUNCTION(NetMulticast, Reliable)
+    void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
+
+    //ä»¥å±å¹•ä¸­å¿ƒä½œä¸ºå‡†æ˜Ÿ
+    void TraceUnderCrosshairs(FHitResult& TraceHitResult);
+
+    //ç»˜åˆ¶å‡†æ˜Ÿ
+    void SetHUDCrosshairs(float DeltaTime);
 
 private:
-	class ABlasterCharacter* Character;
-	class ABlasterPlayerController* Controller;
-	class ABlasterHUD* HUD;
+    class ABlasterCharacter* Character;
+    class ABlasterPlayerController* Controller;
+    class ABlasterHUD* HUD;
 
-	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
-	class AWeapon* EquippedWeapon;
+    UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
+    class AWeapon* EquippedWeapon;
 
-	UPROPERTY(EditDefaultsOnly,Category = "MoveMent")
-	FName SocketName = "RightHandSocket";
+    UPROPERTY(EditDefaultsOnly, Category = "MoveMent")
+    FName SocketName = "RightHandSocket";
 
-	UPROPERTY(Replicated)
-	bool bAiming;
+    UPROPERTY(Replicated)
+    bool bAiming;
 
-	UPROPERTY(EditAnywhere, Category = "MoveMent")
-	float BaseWalkSpeed;
-	UPROPERTY(EditAnywhere, Category = "MoveMent")
-	float AimWaklSpeed;
+    UPROPERTY(EditAnywhere, Category = "MoveMent")
+    float BaseWalkSpeed;
+    UPROPERTY(EditAnywhere, Category = "MoveMent")
+    float AimWaklSpeed;
 
-	bool bFireButtonPressed;
+    bool bFireButtonPressed;
 
-	//×¼ĞÇÉäÏß¼ì²âµ½µÄÎ»ÖÃ
-	FVector HitTarget;
+    //å‡†æ˜Ÿå°„çº¿æ£€æµ‹åˆ°çš„ä½ç½®
+    FVector HitTarget;
 
-	FHUDPackage HUDPackage;
+    FHUDPackage HUDPackage;
 
-	//½ÇÉ«ÔÚÅÜ²½Ê±×¼ĞÇÀ©É¢µÄÖµ
-	float CrosshairVelocityFactor;
-	float CrosshairInAirFactor;
-	float CrosshairAimFactor;
-	float CrosshairShootFactor;
+    //è§’è‰²åœ¨è·‘æ­¥æ—¶å‡†æ˜Ÿæ‰©æ•£çš„å€¼
+    float CrosshairVelocityFactor;
+    float CrosshairInAirFactor;
+    float CrosshairAimFactor;
+    float CrosshairShootFactor;
 
-	//²»ß÷×¼Ê±µÄÄ¬ÈÏFOV
-	float DefaultFOV;
-	float CurFOV;
-	UPROPERTY(EditAnywhere)
-	float ZoomFOV = 30.f;
-	UPROPERTY(EditAnywhere)
-	float ZoomInterpSpeed = 20.f;
+    //ä¸å–µå‡†æ—¶çš„é»˜è®¤FOV
+    float DefaultFOV;
+    float CurFOV;
+    UPROPERTY(EditAnywhere)
+    float ZoomFOV = 30.f;
+    UPROPERTY(EditAnywhere)
+    float ZoomInterpSpeed = 20.f;
 
-	void InterpFOV(float DeltaTime);
+    void InterpFOV(float DeltaTime);
 
-	//×Ô¶¯fire
-	FTimerHandle FireTimerHandle;
-	bool bCanFire = true;
-	void StartFireTimer();
-	void FireTimerFinishied();
+    //è‡ªåŠ¨fire
+    FTimerHandle FireTimerHandle;
+    bool bCanFire = true;
+    void StartFireTimer();
+    void FireTimerFinishied();
 
-	bool CanFire();
+    bool CanFire();
 
-	//½ÇÉ«µ±Ç°µÄ×Óµ¯Êı
-	UPROPERTY(ReplicatedUsing = OnRep_CarriedAmmo)
-	int32 CarriedAmmo;
-	UFUNCTION()
-	void OnRep_CarriedAmmo();
-	TMap<EWeaponTyps, int32> CarriedAmmoMap;
-	//Ã¿ÖÖÀàĞÍµÄÎäÆ÷£¬½ÇÉ«³õÊ¼ËùĞ¯´øµÄ×Óµ¯Êı
-	UPROPERTY(EditAnywhere)
-	int32 StartingARAmmo = 30;
+    //è§’è‰²å½“å‰çš„å­å¼¹æ•°
+    UPROPERTY(ReplicatedUsing = OnRep_CarriedAmmo)
+    int32 CarriedAmmo;
+    UFUNCTION()
+    void OnRep_CarriedAmmo();
+    TMap<EWeaponTyps, int32> CarriedAmmoMap;
+    //æ¯ç§ç±»å‹çš„æ­¦å™¨ï¼Œè§’è‰²åˆå§‹æ‰€æºå¸¦çš„å­å¼¹æ•°
+    UPROPERTY(EditAnywhere)
+    int32 StartingARAmmo = 30;
 
-	void InitialzeCarriedAmmo();
+    void InitialzeCarriedAmmo();
 
 
-	//×é¼ş×´Ì¬
-	UPROPERTY(ReplicatedUsing = OnRep_CombatState)
-	ECombatState CombatState = ECombatState::ECS_Unoccupied;
-	UFUNCTION()
-	void OnRep_CombatState();
+    //ç»„ä»¶çŠ¶æ€
+    UPROPERTY(ReplicatedUsing = OnRep_CombatState)
+    ECombatState CombatState = ECombatState::ECS_Unoccupied;
+    UFUNCTION()
+    void OnRep_CombatState();
 
-public:	
-	void EquipWeapon(AWeapon* WeaponToEquip);
-		
-	void UpdataAmmoValues();
+public:
+    void EquipWeapon(AWeapon* WeaponToEquip);
+
+    void UpdataAmmoValues();
 
 };

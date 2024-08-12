@@ -32,7 +32,7 @@ public:
 	void SetHUDWeaponAmmo(int32 Ammo);
 	void SetHUDCarriedAmmo(int32 Ammo);
 	void SetHUDMatchCountdown(float CountdownTime);
-	//µ¹¼ÆÊ±
+	//å€’è®¡æ—¶
 	void SetHUDAnnouncementCountdown(float CountdownTime);
 	virtual float GetServerTime();
 	void OnMatchStateSet(FName State);
@@ -47,15 +47,15 @@ protected:
 	void Client_ReportServerTime(float TimeOfClientRequest,float TimeServerReceivedClientRequest);
 	UFUNCTION(Server,Reliable)
 	void Server_CheckMatchState();
-	//Íæ¼ÒÖĞÍ¾¼ÓÈëgame
+	//ç©å®¶ä¸­é€”åŠ å…¥game
 	UFUNCTION(Client,Reliable)
-	void Client_JoinMidgame(FName StateOfMatch,float Warmup,float Match,float StartingTime);
+	void Client_JoinMidgame(FName StateOfMatch,float Warmup,float Match,float StartingTime,float CoolTime);
 
-	//ÉèÖÃÓÎÏ·Ê±¼ä
+	//è®¾ç½®æ¸¸æˆæ—¶é—´
 	void SetHUDTime();
-	//ÓÎÏ·×´Ì¬¿ªÊ¼
+	//æ¸¸æˆçŠ¶æ€å¼€å§‹
 	void HandleMatchHasStarted();
-	//ÓÎÏ·ÀäÈ´ÆÚ
+	//æ¸¸æˆå†·å´æœŸ
 	void HandleCooldown();
 
 private:
@@ -70,26 +70,29 @@ private:
 protected:
 	UPROPERTY()
 	class ABlasterHUD* BlasterHUD;
-	//clientºÍserver¶à¾ÃÍ¬²½Ò»´ÎÊ±¼ä
+	//clientå’Œserverå¤šä¹…åŒæ­¥ä¸€æ¬¡æ—¶é—´
 	UPROPERTY(EditAnywhere,Category = Time)
 	float TimeSyncFrequency = 5.f;
 
-	//¿Í»§¶Ëµ½·şÎñÆ÷µÄÑÓ³ÙÊ±¼ä
+	//å®¢æˆ·ç«¯åˆ°æœåŠ¡å™¨çš„å»¶è¿Ÿæ—¶é—´
 	float ClientServerDelta = 0.f;
 	float TimeSyncRunningTime = 0.f;
 
 private:
 
-	//ÓÎÏ·×´Ì¬
+	//æ¸¸æˆçŠ¶æ€
 	UPROPERTY(ReplicatedUsing = OnRep_MatchState)
 	FName MatchState;
 	UPROPERTY()
 	class UCharacterOverlay* CharacterOverlay;
+	UPROPERTY()
+	class ABlasterGameMode* BlasterGameMode;
 
-	//±ÈÈüÊ±¼ä
+	//æ¯”èµ›æ—¶é—´
 	float MatchTime = 0.f;
 	float WarmupTime = 0.f;
 	float LevelStartingTime = 0.f;
+	float CooldownTime = 0.f;
 	uint32 CountdownInt = 0;
 	bool bInitializeCharacterOverlay = false;
 	float HUDHealth;

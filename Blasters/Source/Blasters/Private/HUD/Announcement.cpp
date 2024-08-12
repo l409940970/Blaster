@@ -7,9 +7,21 @@
 
 void UAnnouncement::SetAnnouncementCountdown(float CountdownTime)
 {
+	if (CountdownTime < 0.f)
+	{
+		WarmupTime->SetText(FText());
+		return;
+	}
 	int32 Minutes = FMath::FloorToInt(CountdownTime / 60);
 	int32 Seconds = CountdownTime - Minutes * 60;
 
 	FString CountdownText = FString::Printf(TEXT("%02d:%02d"), Minutes, Seconds);
 	WarmupTime->SetText(FText::FromString(CountdownText));
+}
+
+void UAnnouncement::FinishiedGame()
+{
+	FString Text("新游戏倒计时： ");
+	AnnouncementText->SetText(FText::FromString(Text));
+	InfoText->SetText(FText());
 }
