@@ -18,9 +18,9 @@ public:
 	UTexture2D* CrosshairsTop;
 	UTexture2D* CrosshairsBottom;
 
-	//×¼ÐÇµÄ¸¡¶¯·¶Î§
+	//å‡†æ˜Ÿçš„æµ®åŠ¨èŒƒå›´
 	float CrosshairSpread;
-	//×¼ÐÇÑÕÉ«
+	//å‡†æ˜Ÿé¢œè‰²
 	FLinearColor CrosshairColor;
 };
 
