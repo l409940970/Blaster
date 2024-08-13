@@ -94,6 +94,12 @@ void ABlasterPlayerController::SetHUDTime()
 
 	if (HasAuthority())
 	{
+        //if (BlasterGameMode == nullptr)
+        //{
+        //    BlasterGameMode = Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this));
+        //    LevelStartingTime = BlasterGameMode->LevelStartingTime;
+        //}
+
 		BlasterGameMode = BlasterGameMode == nullptr ? Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this)) : BlasterGameMode;
 		if (BlasterGameMode)
 		{

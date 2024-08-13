@@ -53,6 +53,7 @@ public:
 	float LevelStartingTime = 0.f;
 
 private:
+    //倒计时
 	float CountdownTime = 0.f;
 
 };
