@@ -4,5 +4,5 @@
 
 #include "CoreMinimal.h"
 
-//自定义的命名，用于对应在项目设置中自己添加的碰撞类型
+//鑷畾涔夌殑鍛藉悕锛岀敤浜庡搴斿湪椤圭洰璁剧疆涓嚜宸辨坊鍔犵殑纰版挒绫诲瀷
 #define ECC_SKeletaMesh ECollisionChannel::ECC_GameTraceChannel1

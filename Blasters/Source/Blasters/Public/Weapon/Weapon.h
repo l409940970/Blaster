@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -8,7 +8,7 @@
 #include "Weapon.generated.h"
 
 
-//ÎäÆ÷×´Ì¬
+//æ­¦å™¨çŠ¶æ€
 UENUM(BlueprintType)
 enum class EWeaponState : uint8
 {
@@ -30,20 +30,20 @@ public:
 	AWeapon();
 
 	virtual void Tick(float DeltaTime) override;
-	//ÏÔÊ¾Ê°È¡ui
+	//æ˜¾ç¤ºæ‹¾å–ui
 	void ShowPickupWidget(bool bShowWidget);
 
-	//»ñÈ¡ÉúÃüÖÜÆÚ¸´ÖÆµÀ¾ß
+	//è·å–ç”Ÿå‘½å‘¨æœŸå¤åˆ¶é“å…·
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void OnRep_Owner() override;
 
 	virtual void Fire(const FVector& HitTarget);
 
 	void Dropped();
-	//Ìí¼Ó×Óµ¯
+	//æ·»åŠ å­å¼¹
 	void AddAmmo(int32 AmmoToAdd);
 
-	//Ê®×Ö×¼ĞÇui
+	//åå­—å‡†æ˜Ÿui
 	UPROPERTY(EditAnywhere, Category = Crosshairs)
 	class UTexture2D* CrosshairsCenter;
 	UPROPERTY(EditAnywhere, Category = Crosshairs)
@@ -55,13 +55,13 @@ public:
 	UPROPERTY(EditAnywhere, Category = Crosshairs)
 	UTexture2D* CrosshairsBottom;
 
-	//×Ô¶¯¿ª»ğ
+	//è‡ªåŠ¨å¼€ç«
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float FireDelay = 0.15f;
 	UPROPERTY(EditAnywhere, Category = Combat)
 	bool bAutomatic = true;
 
-	//Ê°È¡ÒôĞ§
+	//æ‹¾å–éŸ³æ•ˆ
 	UPROPERTY(EditAnywhere)
 	class USoundCue* EquipSound;
 
@@ -97,37 +97,37 @@ private:
 	UPROPERTY(ReplicatedUsing = OnRep_WeaponState, VisibleAnywhere, Category = "Weapon Properties")
 	EWeaponState WeaponState;
 
-	//WeaponstateÊôĞÔ¸Ä±äºóµÄµ÷ÓÃº¯Êı£¨¿Í»§¶ËÖ´ĞĞ£©
+	//Weaponstateå±æ€§æ”¹å˜åçš„è°ƒç”¨å‡½æ•°ï¼ˆå®¢æˆ·ç«¯æ‰§è¡Œï¼‰
 	UFUNCTION()
 	void OnRep_WeaponState();
 
-	//Ê°È¡ui
+	//æ‹¾å–ui
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	class UWidgetComponent* PickUpWidget;
-	//¿ª»ğ¶¯»­
+	//å¼€ç«åŠ¨ç”»
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	class UAnimationAsset* FireAnimation;
 
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	TSubclassOf<class ACasing> CasingClass;
 
-	//Ãé×¼Ê±µÄfov
+	//ç„å‡†æ—¶çš„fov
 	UPROPERTY(EditAnywhere)
 	float ZoomFOV= 30.f;
 	UPROPERTY(EditAnywhere)
-	//fovÇĞ»»ËÙ¶È
+	//fovåˆ‡æ¢é€Ÿåº¦
 	float ZoomInterSpeed = 20.f;
 
-	//ÎäÆ÷µ±Ç°µÄ×Óµ¯Êı
+	//æ­¦å™¨å½“å‰çš„å­å¼¹æ•°
 	UPROPERTY(EditAnywhere,ReplicatedUsing = OnRep_Ammo)
 	int32 Ammo;
-	//µ¯¼Ğ×î´óÈİÁ¿
-	UPROPERTY(EditAnywhere)
+	//å¼¹å¤¹æœ€å¤§å®¹é‡
+	UPROPERTY(EditAnywhere, meta = (ToolTip = "å¼¹å¤¹æœ€å¤§å®¹é‡"))
 	int32 MagCapacity;
 
 	UFUNCTION()
 	void OnRep_Ammo();
-	//×Óµ¯¼õÉÙ
+	//å­å¼¹å‡å°‘
 	void SpendRound();
 
 	UPROPERTY()
@@ -135,7 +135,7 @@ private:
 	UPROPERTY()
 	class ABlasterPlayerController* BlasterOwnerPlayerController;
 
-	//ÎäÆ÷
+	//æ­¦å™¨
 	UPROPERTY(EditAnywhere)
 	EWeaponTyps WeaponType;
 

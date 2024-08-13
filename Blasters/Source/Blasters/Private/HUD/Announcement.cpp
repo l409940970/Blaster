@@ -21,7 +21,7 @@ void UAnnouncement::SetAnnouncementCountdown(float CountdownTime)
 
 void UAnnouncement::FinishiedGame()
 {
-	FString Text("新游戏倒计时： ");
+	FString Text = TEXT("新游戏倒计时： ");
 	AnnouncementText->SetText(FText::FromString(Text));
 	InfoText->SetText(FText());
 }
