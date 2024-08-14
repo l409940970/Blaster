@@ -252,9 +252,15 @@ void ABlasterPlayerController::HandleCooldown()
 		if (BlasterHUD->Announcement)
 		{
 			BlasterHUD->Announcement->SetVisibility(ESlateVisibility::Visible);
-			BlasterHUD->Announcement->FinishiedGame();
+			BlasterHUD->Announcement->InCooldown();
 		}
 	}
+
+    ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn());
+    if (BlasterCharacter)
+    {
+        BlasterCharacter->InCooldown();
+    }
 }
 
 void ABlasterPlayerController::SetHUDHealth(float Health, float MaxHealth)

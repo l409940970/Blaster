@@ -19,7 +19,7 @@ void UAnnouncement::SetAnnouncementCountdown(float CountdownTime)
 	WarmupTime->SetText(FText::FromString(CountdownText));
 }
 
-void UAnnouncement::FinishiedGame()
+void UAnnouncement::InCooldown()
 {
 	FString Text = TEXT("新游戏倒计时： ");
 	AnnouncementText->SetText(FText::FromString(Text));

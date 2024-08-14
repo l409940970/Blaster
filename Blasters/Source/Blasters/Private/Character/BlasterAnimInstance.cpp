@@ -23,13 +23,13 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 		BlasterChanracter = Cast<ABlasterCharacter>(TryGetPawnOwner());
 		return;
 	}
-	//»ñÈ¡ËÙ¶È
+	//èŽ·å–é€Ÿåº¦
 	FVector Velocity = BlasterChanracter->GetVelocity();
 	Velocity.Z = 0;
 	Speed = Velocity.Size();
 
 	bIsInAir = BlasterChanracter->GetCharacterMovement()->IsFalling();
-	//GetCurrentAcceleration()£º»ñÈ¡¼ÓËÙ¶È
+	//GetCurrentAcceleration()ï¼šèŽ·å–åŠ é€Ÿåº¦
 	bIsAccelerating = BlasterChanracter->GetCharacterMovement()->GetCurrentAcceleration().Size() > 0.f ? true : false;
 	bWeaponEquipped = BlasterChanracter->IsWeaponEquipped();
 	EquippedWeapon = BlasterChanracter->GetEquippedWeapon();
@@ -39,13 +39,13 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	bRotateRootBone = BlasterChanracter->ShouldRotateRootBone();
 	bIsElimmed = BlasterChanracter->IsElimmed();
 	bUseFABRIK = BlasterChanracter->GetCombatState() != ECombatState::ECS_Reloading;
-	bUseFABRIK = BlasterChanracter->GetCombatState() != ECombatState::ECS_Reloading;
-	bTransformRightHadn = BlasterChanracter->GetCombatState() != ECombatState::ECS_Reloading;
+    bUseAimOffsets = BlasterChanracter->GetCombatState() != ECombatState::ECS_Reloading && !BlasterChanracter->GetDisableGameplay();
+	bTransformRightHadn = BlasterChanracter->GetCombatState() != ECombatState::ECS_Reloading && !BlasterChanracter->GetDisableGameplay();
 
 
 
-	//RotatorÔÚµ×²ãÒÑ¾­ÊµÏÖÁË¸´ÖÆ
-	//yawoffset ÓÃÓÚÉ¨Éä  
+	//Rotatoråœ¨åº•å±‚å·²ç»å®žçŽ°äº†å¤åˆ¶
+	//yawoffset ç”¨äºŽæ‰«å°„  
 	FRotator AimRotation = BlasterChanracter->GetBaseAimRotation();
 	FRotator MovementRotation = UKismetMathLibrary::MakeRotFromX(BlasterChanracter->GetVelocity());
 	FRotator DeltaRot = UKismetMathLibrary::NormalizedDeltaRotator(MovementRotation, AimRotation);
@@ -53,18 +53,18 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	YawOffset = DeltaRotation.Yaw;
 
 
-	//ÇãÐ±ºÍ½ÇÉ«±¾ÉíÓëÆä×ÔÉíÐý×ªÖ®¼äµÄdelta AirÐý×ªÓÐ¹Ø
+	//å€¾æ–œå’Œè§’è‰²æœ¬èº«ä¸Žå…¶è‡ªèº«æ—‹è½¬ä¹‹é—´çš„delta Airæ—‹è½¬æœ‰å…³
 	CharacterRotationLastFrame = CharacterRotation;
 	CharacterRotation = BlasterChanracter->GetActorRotation();
-	//µ±Ç°Ö¡Ðý×ªµ½Ç°Ò»Ö¡µÄ²îÁ¿
+	//å½“å‰å¸§æ—‹è½¬åˆ°å‰ä¸€å¸§çš„å·®é‡
 	const FRotator Delta = UKismetMathLibrary::NormalizedDeltaRotator(CharacterRotation, CharacterRotationLastFrame);
 	const float Target = Delta.Yaw / DeltaTime;
-	//²åÖµ
+	//æ’å€¼
 	const float Interp = FMath::FInterpTo(Lean, Target, DeltaTime, 6.f);
 	Lean = FMath::Clamp(Interp, -90.f, 90.f);
 
 	
-	//Ãé×¼Æ«ÒÆ
+	//çž„å‡†åç§»
 	AO_Yaw = BlasterChanracter->GetAO_Yaw();
 	AO_Pitch = BlasterChanracter->GetAO_Pitch();
 
@@ -73,8 +73,8 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 		LeftHandTransform = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(FName("LeftHandSocket"), ERelativeTransformSpace::RTS_World);
 		FVector OutPosition;
 		FRotator OutRotation;
-		//½«Î»ÖÃ´ÓÊÀ½ç¿Õ¼ä×ª»»Îª¹Ç÷ÀÏà¶Ô¿Õ¼ä
-		//½«LeftHandTransformÔÚÊÀ½çµÄÎ»ÖÃ×ª»»µ½hand_rÔÚ¹Ç÷ÀÖÐµÄÏà¶ÔÎ»ÖÃ
+		//å°†ä½ç½®ä»Žä¸–ç•Œç©ºé—´è½¬æ¢ä¸ºéª¨éª¼ç›¸å¯¹ç©ºé—´
+		//å°†LeftHandTransformåœ¨ä¸–ç•Œçš„ä½ç½®è½¬æ¢åˆ°hand_råœ¨éª¨éª¼ä¸­çš„ç›¸å¯¹ä½ç½®
 		BlasterChanracter->GetMesh()->TransformToBoneSpace(FName("hand_r"), LeftHandTransform.GetLocation(), FRotator::ZeroRotator, OutPosition, OutRotation);
 		LeftHandTransform.SetLocation(OutPosition);
 		LeftHandTransform.SetRotation(FQuat(OutRotation));
@@ -86,7 +86,7 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 			FRotator HandRot = UKismetMathLibrary::FindLookAtRotation(RightHandTransform.GetLocation(), RightHandTransform.GetLocation()+ (RightHandTransform.GetLocation()- BlasterChanracter->GetHitTarget()));
 			RightHandRotation = FMath::RInterpTo(RightHandRotation, HandRot, DeltaTime, 25.f);
 
-			//Ç¹¿Ú»æÖÆÒ»ÌõÉäÏß   ²âÊÔ
+			//æžªå£ç»˜åˆ¶ä¸€æ¡å°„çº¿   æµ‹è¯•
 			FTransform MuzzleTipTransform = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(FName("MuzzleFlash"), ERelativeTransformSpace::RTS_World);
 			FVector MuzzleX(FRotationMatrix(MuzzleTipTransform.GetRotation().Rotator()).GetUnitAxis(EAxis::X));
 			DrawDebugLine(GetWorld(), MuzzleTipTransform.GetLocation(), MuzzleTipTransform.GetLocation() + MuzzleX * 1000.f, FColor::Red);
@@ -101,7 +101,7 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	}
 
 
-	//BlasterChanracter->HasAuthority() == true:·þÎñÆ÷ // BlasterChanracter->IsLocallyControlled() == true ±¾µØÍæ¼Ò 
+	//BlasterChanracter->HasAuthority() == true:æœåŠ¡å™¨ // BlasterChanracter->IsLocallyControlled() == true æœ¬åœ°çŽ©å®¶ 
 	//if (!BlasterChanracter->HasAuthority() && !BlasterChanracter->IsLocallyControlled())
 	//{
 	//	GEngine->AddOnScreenDebugMessage(

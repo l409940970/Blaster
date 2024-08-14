@@ -16,7 +16,7 @@ class BLASTERS_API UAnnouncement : public UUserWidget
 
 public:
 	void SetAnnouncementCountdown(float CountdownTime);
-	void FinishiedGame();
+	void InCooldown();
 
 public:
 	UPROPERTY(meta = (BindWidget))

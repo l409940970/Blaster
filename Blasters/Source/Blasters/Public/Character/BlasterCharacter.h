@@ -20,10 +20,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	//»ñÈ¡ÉúÃüÖÜÆÚ¸´ÖÆµÀ¾ß
+	//è·å–ç”Ÿå‘½å‘¨æœŸå¤åˆ¶é“å…·
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	//ActorComponent³õÊ¼Íê³Éºóµ÷ÓÃµÄº¯Êı
+	//ActorComponentåˆå§‹å®Œæˆåè°ƒç”¨çš„å‡½æ•°
 	virtual void PostInitializeComponents() override;
 
 	void PlayFireMontage(bool bAiming);
@@ -34,15 +34,15 @@ public:
 	UFUNCTION(NetMulticast, Unreliable)
 	void Multicast_Hit();
 
-	//µ×²ãÊÇÓÃÓÚÍ¬²½½ÇÉ«µÄÒÆ¶¯£¬ÕâÀïÓÃÀ´Í¬²½½ÇÉ«µÄ×ªÏò£¬ÒòÎªSimProxiesTurnÊÇtickÖ´ĞĞµÄ£¬µ«ÊÇÔÚÍ¬²½¹ı³ÌÖĞ²»ÄÜÃ»Ö¡¶¼Í¬²½¹ıÈ¥£¬»áµ¼ÖÂÎÊÌâ
+	//åº•å±‚æ˜¯ç”¨äºåŒæ­¥è§’è‰²çš„ç§»åŠ¨ï¼Œè¿™é‡Œç”¨æ¥åŒæ­¥è§’è‰²çš„è½¬å‘ï¼Œå› ä¸ºSimProxiesTurnæ˜¯tickæ‰§è¡Œçš„ï¼Œä½†æ˜¯åœ¨åŒæ­¥è¿‡ç¨‹ä¸­ä¸èƒ½æ²¡å¸§éƒ½åŒæ­¥è¿‡å»ï¼Œä¼šå¯¼è‡´é—®é¢˜
 	virtual void OnRep_ReplicatedMovement() override;
 
-	//»÷É±
+	//å‡»æ€
 	void AddScore();
 	UFUNCTION(NetMulticast, Reliable)
 	void Multicast_AddScore();
 
-	//ÌÔÌ­
+	//æ·˜æ±°
 	void Elim();
 
 	UFUNCTION(NetMulticast,Reliable)
@@ -50,6 +50,9 @@ public:
 
 	virtual void Destroyed() override;
 
+
+    UPROPERTY(Replicated)
+    bool bDisableGameplay = false;
 
 protected:
 	virtual void BeginPlay() override;
@@ -69,11 +72,14 @@ protected:
 
 
 	
-	//applydamage»Øµ÷º¯Êı
+	//applydamageå›è°ƒå‡½æ•°
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
 	void UpdateHUDHealth();
 	void PollInit();
+
+    //åŸåœ°æ—‹è½¬
+    void RotateInPlace(float DeltaTime);
 
 private:
 	UPROPERTY(VisibleAnywhere,Category = Camera)
@@ -85,36 +91,36 @@ private:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* OverHeadWidget;
 
-	//Ò»¸ö¿É±»ÍøÂç¸´ÖÆµÄÎäÆ÷±äÁ¿
+	//ä¸€ä¸ªå¯è¢«ç½‘ç»œå¤åˆ¶çš„æ­¦å™¨å˜é‡
 	//UPROPERTY(Replicated)
-	//ReplicatedUsing ±íÊ¾µ±¸Ã±äÁ¿ÔÚ·şÎñÆ÷ÉÏ±ä»¯Ê±,»áµ÷ÓÃÊÂÏÈ°ó¶¨ºÃµÄ»Øµ÷º¯Êı(º¯ÊıÃûÒ»°ãÒÔOnRep¿ªÍ·),»Øµ÷º¯ÊıÒªÓÃUFUNCTION±ê¼Ç
-	//Õâ¸öº¯Êı·şÎñÆ÷²»»áµ÷ÓÃ£¬ÒòÎª¸´ÖÆÊÇ´Ó·şÎñÆ÷µ½¿Í»§¶Ë£¬²»ÄÜ´Ó¿Í»§¶Ëµ½·şÎñÆ÷
+	//ReplicatedUsing è¡¨ç¤ºå½“è¯¥å˜é‡åœ¨æœåŠ¡å™¨ä¸Šå˜åŒ–æ—¶,ä¼šè°ƒç”¨äº‹å…ˆç»‘å®šå¥½çš„å›è°ƒå‡½æ•°(å‡½æ•°åä¸€èˆ¬ä»¥OnRepå¼€å¤´),å›è°ƒå‡½æ•°è¦ç”¨UFUNCTIONæ ‡è®°
+	//è¿™ä¸ªå‡½æ•°æœåŠ¡å™¨ä¸ä¼šè°ƒç”¨ï¼Œå› ä¸ºå¤åˆ¶æ˜¯ä»æœåŠ¡å™¨åˆ°å®¢æˆ·ç«¯ï¼Œä¸èƒ½ä»å®¢æˆ·ç«¯åˆ°æœåŠ¡å™¨
 	UPROPERTY(ReplicatedUsing = OnRep_OverlappingWeapon)
 	class AWeapon* OverlappingWeapon;
 
-	//Õâ¸ö´æ´¢µÄlastWeaponÊÇÉÏÒ»´ÎµÄÖµ
+	//è¿™ä¸ªå­˜å‚¨çš„lastWeaponæ˜¯ä¸Šä¸€æ¬¡çš„å€¼
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
 
 
-	//Õ½¶·×é¼ş
+	//æˆ˜æ–—ç»„ä»¶
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class UCombatComponent* Combat;
 
-	//Ê¹ÓÃRPC,¿É¿¿´«Êä
-	//º¯ÊıµÄ¶¨ÒåºóÃæÒª¼ÓÉÏ _Implementation
+	//ä½¿ç”¨RPC,å¯é ä¼ è¾“
+	//å‡½æ•°çš„å®šä¹‰åé¢è¦åŠ ä¸Š _Implementation
 	UFUNCTION(Server,Reliable)
 	void Server_EquipButtonPressed();
 
-	//Ãé×¼Æ«ÒÆ
+	//ç„å‡†åç§»
 	void AimOffset(float DeltaTime);
 	void CalculateAO_Pitch();
 	float CalculateSpeed();
 	void TurnInPlace(float DeltaTime);
-	//Ä£Äâ´úÀí¶ËµÄÍæ¼Ò×ªÏòÂß¼­
+	//æ¨¡æ‹Ÿä»£ç†ç«¯çš„ç©å®¶è½¬å‘é€»è¾‘
 	void SimProxiesTurn();
 
-	//Ãé×¼Æ«ÒÆ
+	//ç„å‡†åç§»
 	float AO_Yaw;
 	float AO_Pitch;
 	float InterpAO_Yaw;
@@ -123,36 +129,36 @@ private:
 
 	ETurningInPlace TurningInPlace;
 
-	//¿ª»ğÃÉÌ«Ææ
+	//å¼€ç«è’™å¤ªå¥‡
 	UPROPERTY(EditAnywhere,Category = "Combat")
 	class UAnimMontage* FireWeaponMontage;
 	UPROPERTY(EditAnywhere,Category = "Combat")
 	UAnimMontage* ReloadMontage;
-	//ÊÜ»÷ÃÉÌ«Ææ
+	//å—å‡»è’™å¤ªå¥‡
 	UPROPERTY(EditAnywhere,Category = Combat)
 	UAnimMontage* HitReactMontage;
-	//ËÀÍöÃÉÌ«Ææ
+	//æ­»äº¡è’™å¤ªå¥‡
 	UPROPERTY(EditAnywhere,Category = Combat)
 	UAnimMontage* ElimMontage;
 
-	//µ±Ïà»úÓë½ÇÉ«Ö®¼äµÄÎ»ÖÃµÍÓÚÕâ¸öÖµÊ±£¬Òş²Ø½ÇÉ«Ä£ĞÍ£¬ÓÃÓÚ½ÇÉ«¿¨Ç½Ìå
+	//å½“ç›¸æœºä¸è§’è‰²ä¹‹é—´çš„ä½ç½®ä½äºè¿™ä¸ªå€¼æ—¶ï¼Œéšè—è§’è‰²æ¨¡å‹ï¼Œç”¨äºè§’è‰²å¡å¢™ä½“
 	UPROPERTY(EditAnywhere, Category = Camera)
 	float CameraThreshold = 200.f;
 	void HideCameraIfCharacterClose();
 
 	void PlayHitMontage();
-	//ÊÇ·ñĞı×ª¸ù¹Ç÷À
+	//æ˜¯å¦æ—‹è½¬æ ¹éª¨éª¼
 	bool bRotateRootBone;
-	//Ä£Äâ¶ËÓÃÓÚ×ªÏòµÄÖµ
+	//æ¨¡æ‹Ÿç«¯ç”¨äºè½¬å‘çš„å€¼
 	float TurnThreshold = 0.5f;
 	FRotator ProxyRotationLastFrame;
 	FRotator ProxyRotation;
 	float ProxyYaw;
-	//ÓÃÓÚÍ¬²½×ªÏòµÄÖÜÆÚ
+	//ç”¨äºåŒæ­¥è½¬å‘çš„å‘¨æœŸ
 	float TimeSinceLastMovementReplication;
 
 
-	//ÉúÃü
+	//ç”Ÿå‘½
 	UPROPERTY(EditAnywhere, Category = "Player Status", meta = (ClampMin = "0"));
 	float MaxHealth = 100.f;
 	UPROPERTY(ReplicatedUsing = OnRep_Health, VisibleAnywhere,Category = "Player Status")
@@ -169,26 +175,26 @@ private:
 	float ElimDelay = 3.f;
 	void ElimTimerFinishied();
 
-	//ÈÜ½â
+	//æº¶è§£
 	UPROPERTY(VisibleAnywhere)
 	UTimelineComponent* DissolveTimeline;
-	//timelineÎ¯ÍĞ¾ä±ú
+	//timelineå§”æ‰˜å¥æŸ„
 	FOnTimelineFloat DissolveTrack;
-	//timeline»Øµ÷º¯Êı
+	//timelineå›è°ƒå‡½æ•°
 	UFUNCTION()
 	void UpdateDissolveMaterial(float DissolveValue);
 	void StartDissove();
-	//ÈÜ½âµÄÊ±¼äÇúÏß
+	//æº¶è§£çš„æ—¶é—´æ›²çº¿
 	UPROPERTY(EditAnywhere)
 	UCurveFloat* DissolveCurve;
-	//ÈÜ½âµÄ¶¯Ì¬²ÄÖÊÊµÀı
+	//æº¶è§£çš„åŠ¨æ€æè´¨å®ä¾‹
 	UPROPERTY(VisibleAnywhere)
 	UMaterialInstanceDynamic* DynamicDissolveMaterialInstance;
-	//½ÇÉ«ËÀÍöÊ±½«²ÄÖÊĞŞ¸ÄÎªÈÜ½â²ÄÖÊ
+	//è§’è‰²æ­»äº¡æ—¶å°†æè´¨ä¿®æ”¹ä¸ºæº¶è§£æè´¨
 	UPROPERTY(EditAnywhere)
 	UMaterialInstance* DissolveMaterialInstance;
 
-	//ËÀÍöÌØĞ§¡¢ÒôĞ§
+	//æ­»äº¡ç‰¹æ•ˆã€éŸ³æ•ˆ
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* ElimBotEffect;
 	UPROPERTY(VisibleAnywhere)
@@ -204,11 +210,14 @@ private:
 
 
 public:	
-	//FORCEINLINE ¹Ø¼ü×ÖµÄ×÷ÓÃÊÇ¸æËß±àÒëÆ÷£¬ËüĞèÒªÇ¿ÖÆ½«º¯ÊıÄÚÁª,Ò»°ãÓÃÓÚÂß¼­¼òµ¥µÄº¯Êı
+	//FORCEINLINE å…³é”®å­—çš„ä½œç”¨æ˜¯å‘Šè¯‰ç¼–è¯‘å™¨ï¼Œå®ƒéœ€è¦å¼ºåˆ¶å°†å‡½æ•°å†…è”,ä¸€èˆ¬ç”¨äºé€»è¾‘ç®€å•çš„å‡½æ•°
 	//FORCEINLINE void SetOverlappingWeapon(AWeapon* Weapon) { OverlappingWeapon = Weapon; }
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();
 	bool IsAiming();
+
+    //æ¸¸æˆç»“æŸï¼šå†·å´æœŸ
+    void InCooldown();
 
 	FORCEINLINE float GetAO_Yaw() const{ return AO_Yaw; }
 	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
@@ -228,4 +237,7 @@ public:
 	FORCEINLINE bool IsElimmed() const { return bIsElimed; }
 	FORCEINLINE float GetHealth() const { return Health; }
 	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
+    FORCEINLINE UCombatComponent* GetCombat() const { return Combat; }
+    FORCEINLINE bool GetDisableGameplay() const { return bDisableGameplay; }
+
 };
